@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Haunted Court</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&family=IM+Fell+English:ital@0;1&family=Courier+Prime:wght@400;700&display=swap">
+<link rel="stylesheet" href="/style.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+</head>
+<body>
+<main class="stage" id="stage">
+  <canvas id="gl"></canvas>
+  <div class="nogl" id="nogl" hidden>La 3D n'est pas disponible sur cet appareil. Le procès reste utilisable.</div>
+  <div class="flash" id="flash"></div>
+
+  <section class="title" id="title">
+    <p class="kicker">Le procès du code mort</p>
+    <h1>Haunted Court</h1>
+    <p class="case" id="caseLine">Ouverture du dossier…</p>
+    <button class="btn main" id="bEnter" disabled>Entrer dans la salle</button>
+  </section>
+
+  <div class="spelled" id="spelled" aria-live="polite"></div>
+
+  <aside class="hud left" aria-label="Témoins">
+    <div class="lab">Convoquer un témoin</div>
+    <div id="witnesses" class="stack"></div>
+    <label class="check"><input type="checkbox" id="perjury"> Témoin menteur <small>(démo)</small></label>
+    <button class="tab" id="bSound" aria-pressed="false">Son : activer</button>
+  </aside>
+
+  <aside class="hud right" aria-label="Dossier">
+    <div class="lab">Pièces du dossier</div>
+    <div id="facts"></div>
+  </aside>
+
+  <section class="hud bottom">
+    <div class="testi" aria-live="polite">
+      <div class="who"><span class="gname" id="gname">Salle d'audience ouverte</span><span class="gmeta" id="gmeta">Convoquez un témoin à gauche.</span></div>
+      <ol class="say" id="say"></ol>
+      <div class="note" id="note"></div>
+    </div>
+    <div class="ctl">
+      <div class="tally">
+        <div>Vérifiées<strong id="nv">0</strong></div>
+        <div>Rejetées<strong id="nr">0</strong></div>
+      </div>
+      <button class="btn verd" id="bVerd" disabled>Rendre le verdict</button>
+    </div>
+  </section>
+
+  <div class="obj" id="obj" hidden>OBJECTION !</div>
+
+  <section class="verdict" id="verdict" hidden>
+    <div class="vbox">
+      <div class="big" id="vbig"></div>
+      <div class="score" id="vscore"></div>
+      <pre class="term" id="term"></pre>
+      <button class="btn main" id="vClose">Retour à la salle</button>
+    </div>
+  </section>
+</main>
+<script type="module" src="/app.js"></script>
+</body>
+</html>
