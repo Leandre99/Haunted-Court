@@ -1,0 +1,13 @@
+{
+  "name": "haunted-court",
+  "version": "0.1.0",
+  "description": "Le tribunal du code mort : les fantômes des anciens développeurs témoignent, chaque phrase est vérifiée contre git.",
+  "type": "module",
+  "private": true,
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "license": "MIT"
+}
