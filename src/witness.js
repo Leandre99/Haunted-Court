@@ -25,7 +25,7 @@ function verbFor(subject) {
 
 function offlineTestimony(author, commits, others, perjury) {
   const out = pick(commits).map((c) => ({
-    text: `${verbFor(c.subject)} ceci, en ${new Date(c.date).getFullYear()} : « ${c.subject} »`,
+    text: `${verbFor(c.subject)} ceci, en ${new Date(c.date).getFullYear()} : ‹ ${c.subject} ›`,
     hash: c.hash.slice(0, 7),
     quote: c.subject,
   }));
@@ -33,7 +33,7 @@ function offlineTestimony(author, commits, others, perjury) {
     const other = meaningful(others)[0];
     if (other) {
       out.splice(2, 0, {
-        text: `C’est moi qui ai fait ça : « ${other.subject} »`,
+        text: `C’est moi qui ai fait ça : ‹ ${other.subject} ›`,
         hash: other.hash.slice(0, 7),
         quote: other.subject,
       });

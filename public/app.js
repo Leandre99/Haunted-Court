@@ -141,3 +141,15 @@ $('bEnter').addEventListener('click', () => {
     $('caseLine').textContent = 'Dossier illisible : ' + err.message;
   }
 })();
+
+// Aide à la démo et aux captures : #enter entre dans la salle, #demo convoque aussi le premier témoin.
+addEventListener('load', () => {
+  const h = location.hash;
+  if (!h) return;
+  const wait = setInterval(() => {
+    if ($('bEnter').disabled) return;
+    clearInterval(wait);
+    $('bEnter').click();
+    if (h === '#demo') setTimeout(() => document.querySelector('#witnesses .tab')?.click(), 800);
+  }, 200);
+});
