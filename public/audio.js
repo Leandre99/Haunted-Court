@@ -4,13 +4,14 @@
 export function createAudio() {
   let ctx = null, master = null, rain = null, drone = null, thunderTimer = null;
   let sfxOn = false, voiceOn = false;
-  let frVoice = null;
+  let voicePref = 'fr', frVoice = null;
 
   const synth = typeof speechSynthesis !== 'undefined' ? speechSynthesis : null;
   function pickVoice() {
     if (!synth) return;
-    const fr = synth.getVoices().filter((v) => /^fr/i.test(v.lang));
-    frVoice = fr.find((v) => /henri|paul|thomas|claude|male|homme/i.test(v.name)) || fr.find((v) => v.localService) || fr[0] || null;
+    const all = synth.getVoices().filter((v) => v.lang.toLowerCase().startsWith(voicePref));
+    const male = voicePref === 'fr' ? /henri|paul|thomas|claude|male|homme/i : /david|mark|guy|george|daniel|male/i;
+    frVoice = all.find((v) => male.test(v.name)) || all.find((v) => v.localService) || all[0] || null;
   }
   if (synth) { pickVoice(); synth.addEventListener?.('voiceschanged', pickVoice); }
 
@@ -99,7 +100,7 @@ export function createAudio() {
     if (!voiceOn || !synth) return Promise.resolve();
     return new Promise((resolve) => {
       const u = new SpeechSynthesisUtterance(text.replace(/[‹›«»]/g, ' ').replace(/`/g, ''));
-      u.lang = frVoice?.lang || 'fr-FR'; if (frVoice) u.voice = frVoice;
+      u.lang = frVoice?.lang || (voicePref === 'fr' ? 'fr-FR' : 'en-US'); if (frVoice) u.voice = frVoice;
       u.pitch = pitch; u.rate = rate; u.volume = 1;
       const done = () => { clearTimeout(to); resolve(); };
       const to = setTimeout(() => { synth.cancel(); done(); }, maxMs);
@@ -112,6 +113,7 @@ export function createAudio() {
     sfxOn: () => sfxOn,
     voiceOn: () => voiceOn,
     voiceAvailable: () => Boolean(synth),
+    setLang(l) { voicePref = l === 'fr' ? 'fr' : 'en'; pickVoice(); },
     setSfx(on) {
       sfxOn = on;
       if (!ensure()) { sfxOn = false; return false; }

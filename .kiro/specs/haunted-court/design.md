@@ -1,29 +1,33 @@
 # Design — Haunted Court
 
-## Vue d'ensemble
+## Overview
 ```
-navigateur (three.js + UI)  ──HTTP──▶  src/server.js ──▶ git (execFile, sans shell)
-                                         ├─ facts.js    faits défense / accusation + score
-                                         ├─ witness.js  déclarations (LLM ou hors-ligne) + vérification
-                                         ├─ git.js      lecture de l'historique, verifyClaim()
-                                         └─ verdict.js  rapport + branche dans un clone
+browser (three.js + UI) ──HTTP──▶ src/server.js ──▶ git (execFile, no shell)
+                                    ├─ facts.js    defense / prosecution facts + score
+                                    ├─ witness.js  statements (LLM or offline) + verification
+                                    ├─ duel.js     contested file, two witnesses answering
+                                    ├─ git.js      history access, verifyClaim()
+                                    ├─ verdict.js  report + branch in a clone
+                                    └─ i18n.js     server-side texts (en, fr)
 ```
 
-## Choix
-- **Zéro dépendance.** Node 20+ et git suffisent : `npm start`. Pas d'étape de build.
-- **`execFile`, jamais de shell.** Les hashes sont validés par `^[0-9a-f]{4,40}$` avant d'atteindre git.
-- **Le vérificateur est la pièce centrale.** Le LLM propose, `verifyClaim()` dispose. Une phrase non vérifiée est barrée à l'écran.
-- **Serveur lié à 127.0.0.1.** Le dépôt jugé est local.
+## Decisions
+- **Zero dependencies.** Node 20+ and git are enough: `npm start`. No build step.
+- **`execFile`, never a shell.** Hashes are validated with `^[0-9a-f]{4,40}$` before they reach git.
+- **The verifier is the centerpiece.** The LLM proposes, `verifyClaim()` disposes. An unverified sentence is struck through on screen.
+- **Language-neutral results.** `verifyClaim()` returns a code (`r_missing`, `r_other`…); `i18n.reason()` translates it. Facts carry a key and variables and are localized at the edge.
+- **Server bound to 127.0.0.1.** The repository on trial is local.
 
 ## API
-| Route | Rôle |
+| Route | Role |
 |---|---|
-| `GET /api/case?repo=` | faits, témoins, métadonnées |
-| `POST /api/testimony` `{author, perjury}` | déclarations déjà vérifiées |
-| `POST /api/verdict` | verdict + artefact |
+| `GET /api/case?repo=&lang=` | facts, witnesses, metadata |
+| `POST /api/testimony` `{author, perjury, lang}` | statements, already verified |
+| `POST /api/duel` `{perjury, lang}` | the pair, the contested file, the exchange |
+| `POST /api/verdict` `{lang}` | verdict + artifact |
 
-## Barème du verdict
-Chaque fait porte un poids (1 à 3) pour la défense ou l'accusation. Le plus lourd gagne ; égalité = EXÉCUTER.
+## Verdict scoring
+Each fact carries a weight (1 to 3) for the defense or the prosecution. The heavier side wins; a tie means EXECUTE.
 
-## Mode « témoin menteur »
-Option de démonstration : le mode hors-ligne glisse une déclaration qui s'attribue le commit d'un autre auteur, pour montrer le vérificateur à l'œuvre. Elle est étiquetée comme telle dans l'interface.
+## "Lying witness" mode
+A demo option: offline mode slips in one statement that claims another author's commit, to show the verifier at work. It is labelled as such in the interface.

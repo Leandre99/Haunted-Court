@@ -1,14 +1,14 @@
 {
   "enabled": true,
-  "name": "Tests du vérificateur",
-  "description": "Quand git.js ou witness.js change, relancer les tests : le vérificateur est la pièce centrale du projet.",
+  "name": "Verifier tests",
+  "description": "When git.js, witness.js or duel.js changes, rerun the tests: the verifier is the centerpiece of the project.",
   "version": "1",
   "when": {
     "type": "fileEdited",
-    "patterns": ["src/git.js", "src/witness.js", "test/*.test.js"]
+    "patterns": ["src/git.js", "src/witness.js", "src/duel.js", "test/*.test.js"]
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Lance `npm test`. Si un test échoue, corrige le code (pas le test) sauf si la spec R3 a changé. Rappelle-moi ce qui a été vérifié."
+    "prompt": "Run `npm test`. If a test fails, fix the code (not the test) unless spec R3 has changed. Tell me what was verified."
   }
 }

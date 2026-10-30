@@ -1,14 +1,16 @@
-# Tâches
+# Tasks
 
-- [x] 1. Lecture de l'historique git, regroupement par auteur (R1)
-- [x] 2. `verifyClaim` : existence, auteur, citation, hash mal formé (R3)
-- [x] 3. Tests du vérificateur (6 cas, `npm test`)
-- [x] 4. Faits défense / accusation et barème (R1, R4)
-- [x] 5. Témoignage hors-ligne + parjure de démonstration (R2)
-- [x] 6. Témoignage LLM avec repli hors-ligne (R2)
-- [x] 7. Verdict : rapport et branche `haunted-court/verdict` dans un clone (R4)
-- [x] 8. Salle 3D, fantôme en shader, objection (R5)
-- [x] 9. Duel : deux fantômes contre-interrogés sur le même fichier (R6)
-- [x] 10. Voix des fantômes et ambiance sonore synthétisée (R7)
-- [ ] 11. Déploiement avec un dépôt de démonstration public
-- [ ] 12. Vidéo de démonstration et page Devpost
+- [x] 1. Read the git history, group by author (R1)
+- [x] 2. `verifyClaim`: existence, author, quote, malformed hash (R3)
+- [x] 3. Verifier tests (`npm test`)
+- [x] 4. Defense / prosecution facts and scoring (R1, R4)
+- [x] 5. Offline testimony + demo perjury (R2)
+- [x] 6. LLM testimony with offline fallback (R2)
+- [x] 7. Verdict: report and `haunted-court/verdict` branch in a clone (R4)
+- [x] 8. 3D courtroom, shader ghost, objection (R5)
+- [x] 9. Duel: two ghosts cross-examined on the same file (R6)
+- [x] 10. Ghost voices and synthesized sound ambience (R7)
+- [x] 11. English by default, French option (R8)
+- [ ] 12. Property-based tests for `verifyClaim`
+- [ ] 13. Public deployment with a demonstration repository
+- [ ] 14. Demo video and Devpost page

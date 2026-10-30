@@ -1,4 +1,5 @@
 import { filesOfCommit, verifyClaim } from './git.js';
+import { t, reason, normLang } from './i18n.js';
 
 const MODEL = process.env.HAUNTED_MODEL || 'claude-sonnet-5-5';
 
@@ -13,36 +14,31 @@ function pick(commits, n = 4) {
   return Array.from({ length: n }, (_, i) => list[Math.floor((i * (list.length - 1)) / (n - 1))]);
 }
 
-function verbFor(subject) {
+/** Le verbe est deviné d'après le message de commit (anglais, comme la plupart des dépôts). */
+function verbKey(subject) {
   const s = subject.toLowerCase();
-  if (/^(fix|bug|correct)/.test(s)) return 'J’ai corrigé';
-  if (/^(add|new|create|implement)/.test(s)) return 'J’ai ajouté';
-  if (/^(remove|delete|drop)/.test(s)) return 'J’ai supprimé';
-  if (/^(refactor|clean|rename|move)/.test(s)) return 'J’ai remanié';
-  if (/^(update|bump|upgrade)/.test(s)) return 'J’ai mis à jour';
-  return 'J’ai écrit';
+  if (/^(fix|bug|correct)/.test(s)) return 'v_fix';
+  if (/^(add|new|create|implement)/.test(s)) return 'v_add';
+  if (/^(remove|delete|drop)/.test(s)) return 'v_remove';
+  if (/^(refactor|clean|rename|move)/.test(s)) return 'v_refactor';
+  if (/^(update|bump|upgrade)/.test(s)) return 'v_update';
+  return 'v_write';
 }
 
-function offlineTestimony(author, commits, others, perjury) {
+function offlineTestimony(lang, commits, others, perjury) {
   const out = pick(commits).map((c) => ({
-    text: `${verbFor(c.subject)} ceci, en ${new Date(c.date).getFullYear()} : ‹ ${c.subject} ›`,
+    text: t(lang, 'w_line', { verb: t(lang, verbKey(c.subject)), year: new Date(c.date).getFullYear(), subject: c.subject }),
     hash: c.hash.slice(0, 7),
     quote: c.subject,
   }));
   if (perjury) {
     const other = meaningful(others)[0];
-    if (other) {
-      out.splice(2, 0, {
-        text: `C’est moi qui ai fait ça : ‹ ${other.subject} ›`,
-        hash: other.hash.slice(0, 7),
-        quote: other.subject,
-      });
-    }
+    if (other) out.splice(2, 0, { text: t(lang, 'w_perjury', { subject: other.subject }), hash: other.hash.slice(0, 7), quote: other.subject });
   }
   return out;
 }
 
-async function llmTestimony(repo, author, commits) {
+async function llmTestimony(repo, author, commits, lang) {
   const sample = pick(commits, 8);
   const lines = [];
   for (const c of sample) {
@@ -50,54 +46,50 @@ async function llmTestimony(repo, author, commits) {
     lines.push(`${c.hash.slice(0, 7)} | ${c.date.slice(0, 10)} | ${c.subject} | ${files}`);
   }
   const prompt = [
-    `Tu es le fantôme du développeur « ${author} », appelé à la barre d'un tribunal qui juge un dépôt git mort.`,
-    `Voici une partie de tes vrais commits (hash | date | message | fichiers) :`,
+    `You are the ghost of the developer "${author}", called to the stand in a court trying a dead git repository.`,
+    `Here are some of your real commits (hash | date | message | files):`,
     lines.join('\n'),
     ``,
-    `Fais 4 déclarations à la première personne, en français, dans le ton d'un développeur mort : sobre, un peu amer, jamais drôle à tout prix.`,
-    `Chaque déclaration doit s'appuyer sur UN de ces commits. Réponds UNIQUEMENT par un tableau JSON :`,
-    `[{"text": "...", "hash": "<hash court ci-dessus>", "quote": "<extrait EXACT du message du commit>"}]`,
-    `Ne cite aucun hash absent de la liste.`,
+    `Make 4 first-person statements in ${t(lang, 'llm_lang')}, in the tone of a dead developer: sober, a little bitter, never trying to be funny.`,
+    `Each statement must rest on ONE of these commits. Reply ONLY with a JSON array:`,
+    `[{"text": "...", "hash": "<short hash from the list>", "quote": "<EXACT excerpt of the commit message>"}]`,
+    `Never cite a hash that is not in the list.`,
   ].join('\n');
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'x-api-key': process.env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-    },
+    headers: { 'content-type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
     body: JSON.stringify({ model: MODEL, max_tokens: 1200, messages: [{ role: 'user', content: prompt }] }),
   });
   if (!res.ok) throw new Error('API ' + res.status);
   const data = await res.json();
   const text = data.content?.map((b) => b.text ?? '').join('') ?? '';
-  const json = text.slice(text.indexOf('['), text.lastIndexOf(']') + 1);
-  return JSON.parse(json);
+  return JSON.parse(text.slice(text.indexOf('['), text.lastIndexOf(']') + 1));
 }
 
 /** Convoque un témoin : génère ses déclarations puis vérifie chacune contre git. */
-export async function summon(repo, author, allCommits, { perjury = false } = {}) {
+export async function summon(repo, author, allCommits, { perjury = false, lang = 'en' } = {}) {
+  lang = normLang(lang);
   const mine = allCommits.filter((c) => c.author === author);
-  if (!mine.length) throw new Error('Témoin inconnu : ' + author);
+  if (!mine.length) throw new Error(t(lang, 'err_witness', { name: author }));
   const others = allCommits.filter((c) => c.author !== author);
 
   let statements;
   let mode = 'offline';
   if (process.env.ANTHROPIC_API_KEY) {
     try {
-      statements = await llmTestimony(repo, author, mine);
+      statements = await llmTestimony(repo, author, mine, lang);
       mode = 'llm';
     } catch (err) {
-      console.warn('LLM indisponible, repli hors-ligne :', err.message);
+      console.warn('LLM unavailable, falling back to offline mode:', err.message);
     }
   }
-  statements ??= offlineTestimony(author, mine, others, perjury);
+  statements ??= offlineTestimony(lang, mine, others, perjury);
 
   const verified = [];
   for (const s of statements) {
     const v = await verifyClaim(repo, { hash: s.hash, quote: s.quote, author });
-    verified.push({ text: s.text, hash: s.hash, quote: s.quote, ok: v.ok, reason: v.reason });
+    verified.push({ text: s.text, hash: s.hash, quote: s.quote, ok: v.ok, code: v.code, reason: reason(lang, v) });
   }
   return {
     witness: author,

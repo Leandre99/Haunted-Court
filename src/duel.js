@@ -1,4 +1,5 @@
 import { git, verifyClaim } from './git.js';
+import { t, reason, normLang } from './i18n.js';
 
 // Fichiers qui font de mauvais débats : traductions, binaires, métadonnées, docs.
 const NOISE = /\.(po|mo|lock|min\.js|svg|png|jpe?g|gif|ico|md|rst|txt|cfg|ini|json|ya?ml)$|(^|\/)(locale|migrations|docs?)\/|(^|\/)(__init__\.py|setup\.py|readme[^/]*|changelog[^/]*|history[^/]*|license[^/]*|manifest\.in)$/i;
@@ -54,9 +55,10 @@ export async function bestPair(repo, names) {
 const year = (c) => new Date(c.date).getFullYear();
 
 /** Un contre-interrogatoire : A et B se répondent à tour de rôle, chaque phrase est vérifiée. */
-export async function duel(repo, a, b, { perjury = false, rounds = 3 } = {}) {
+export async function duel(repo, a, b, { perjury = false, rounds = 3, lang = 'en' } = {}) {
+  lang = normLang(lang);
   const c = await contestedFile(repo, a, b);
-  if (!c) throw new Error(`${a} et ${b} n’ont jamais touché le même fichier.`);
+  if (!c) throw new Error(t(lang, 'err_shared', { a, b }));
   const n = Math.min(rounds, c.a.length, c.b.length);
   const pick = (list) => Array.from({ length: n }, (_, i) => list[n === 1 ? 0 : Math.round((i * (list.length - 1)) / (n - 1))]);
   const as = pick(c.a);
@@ -64,15 +66,11 @@ export async function duel(repo, a, b, { perjury = false, rounds = 3 } = {}) {
 
   const lines = [];
   for (let i = 0; i < n; i++) {
-    lines.push({ side: 0, c: as[i], text: i === 0
-      ? `Ce fichier, c’est moi qui l’ai façonné : ‹ ${as[i].subject} › (${year(as[i])})`
-      : `Et en ${year(as[i])}, j’y suis revenu : ‹ ${as[i].subject} ›` });
+    lines.push({ side: 0, c: as[i], text: t(lang, i === 0 ? 'd_open' : 'd_again', { subject: as[i].subject, year: year(as[i]) }) });
     // Parjure de démonstration : B s'attribue un commit de A.
     const liar = perjury && i === Math.min(1, n - 1);
     const bc = liar ? as[i] : bs[i];
-    lines.push({ side: 1, c: bc, text: liar
-      ? `Non. Ça, c’est moi qui l’ai écrit : ‹ ${bc.subject} ›`
-      : `Vous oubliez que j’ai repris ce fichier en ${year(bc)} : ‹ ${bc.subject} ›` });
+    lines.push({ side: 1, c: bc, text: t(lang, liar ? 'd_liar' : 'd_retort', { subject: bc.subject, year: year(bc) }) });
   }
 
   const witnesses = [a, b];
@@ -80,7 +78,7 @@ export async function duel(repo, a, b, { perjury = false, rounds = 3 } = {}) {
   for (const l of lines) {
     const author = witnesses[l.side];
     const v = await verifyClaim(repo, { hash: l.c.hash.slice(0, 7), quote: l.c.subject, author });
-    statements.push({ side: l.side, witness: author, text: l.text, hash: l.c.hash.slice(0, 7), quote: l.c.subject, ok: v.ok, reason: v.reason });
+    statements.push({ side: l.side, witness: author, text: l.text, hash: l.c.hash.slice(0, 7), quote: l.c.subject, ok: v.ok, code: v.code, reason: reason(lang, v) });
   }
   return { file: c.file, witnesses, statements };
 }

@@ -36,7 +36,7 @@ test('un hash inexistant est rejeté', async () => {
   const dir = makeRepo();
   const v = await verifyClaim(dir, { hash: 'deadbee', author: 'Odile' });
   assert.equal(v.ok, false);
-  assert.match(v.reason, /n’existe pas/);
+  assert.equal(v.code, 'r_missing');
 });
 
 test('le commit de quelqu’un d’autre est rejeté', async () => {
@@ -44,7 +44,8 @@ test('le commit de quelqu’un d’autre est rejeté', async () => {
   const raven = (await allCommits(dir)).find((x) => x.author === 'Raven');
   const v = await verifyClaim(dir, { hash: raven.hash.slice(0, 7), author: 'Odile' });
   assert.equal(v.ok, false);
-  assert.match(v.reason, /Raven/);
+  assert.equal(v.code, 'r_other');
+  assert.equal(v.by, 'Raven');
 });
 
 test('une citation inventée est rejetée', async () => {
