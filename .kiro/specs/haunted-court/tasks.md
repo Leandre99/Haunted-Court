@@ -8,7 +8,7 @@
 - [x] 6. Témoignage LLM avec repli hors-ligne (R2)
 - [x] 7. Verdict : rapport et branche `haunted-court/verdict` dans un clone (R4)
 - [x] 8. Salle 3D, fantôme en shader, objection (R5)
-- [ ] 9. Duel : deux fantômes contre-interrogés sur le même fichier
+- [x] 9. Duel : deux fantômes contre-interrogés sur le même fichier (R6)
 - [ ] 10. Voix des fantômes et son spatialisé
 - [ ] 11. Déploiement avec un dépôt de démonstration public
 - [ ] 12. Vidéo de démonstration et page Devpost

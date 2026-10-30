@@ -123,9 +123,11 @@ export function createScene(canvas) {
   const dust = new THREE.Points(dg, new THREE.PointsMaterial({ size: 0.09, map: soft, color: 0xb8a8e8, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending, depthWrite: false })); scene.add(dust);
 
   // Fantôme (shader : fresnel + dissolution + glitch)
-  const ghost = new THREE.Group(); ghost.position.set(0, 1.9, -3.4); ghost.scale.setScalar(2.1); ghost.visible = false; scene.add(ghost);
-  const gu = { uTime: { value: 0 }, uAppear: { value: 0 }, uGlitch: { value: 0 }, uTint: { value: new THREE.Color(0x79e0c4) } };
+  const uTime = { value: 0 };
   const prof = [[0.85, 0], [0.92, 0.18], [0.78, 0.5], [0.62, 0.9], [0.56, 1.2], [0.5, 1.45], [0.36, 1.66], [0, 1.78]].map(([x, y]) => new THREE.Vector2(x, y));
+  function makeGhost(hex) {
+  const ghost = new THREE.Group(); ghost.position.set(0, 1.9, -3.4); ghost.scale.setScalar(2.1); ghost.visible = false; scene.add(ghost);
+  const gu = { uTime, uAppear: { value: 0 }, uGlitch: { value: 0 }, uMul: { value: 1 }, uTint: { value: new THREE.Color(hex) } };
   const gmat = new THREE.ShaderMaterial({
     uniforms: gu, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
     vertexShader: `uniform float uTime;uniform float uGlitch;varying vec3 vN;varying vec3 vV;varying vec3 vP;
@@ -134,7 +136,7 @@ export function createScene(canvas) {
       p.x+=sin(p.y*4.0+uTime*2.0)*0.06*(1.0-p.y/1.8);p.z+=cos(p.y*3.0+uTime*1.6)*0.05;
       p.x+=uGlitch*(step(0.5,fract(sin(floor(p.y*12.0+uTime*30.0))*437.5))-0.5)*0.6;
       vP=p;vec4 mv=modelViewMatrix*vec4(p,1.0);vN=normalize(normalMatrix*normal);vV=-mv.xyz;gl_Position=projectionMatrix*mv;}`,
-    fragmentShader: `uniform float uTime;uniform float uAppear;uniform vec3 uTint;varying vec3 vN;varying vec3 vV;varying vec3 vP;
+    fragmentShader: `uniform float uTime;uniform float uAppear;uniform float uMul;uniform vec3 uTint;varying vec3 vN;varying vec3 vV;varying vec3 vP;
       float h(vec2 s){return fract(sin(dot(s,vec2(12.9898,78.233)))*43758.5453);}
       void main(){float f=pow(1.0-abs(dot(normalize(vN),normalize(vV))),2.0);
       float n=h(floor(vP.xy*22.0+vec2(0.0,-uTime*1.5)));float edge=uAppear*1.25-(1.0-vP.y/1.8)*0.25;if(n>edge)discard;
@@ -142,15 +144,18 @@ export function createScene(canvas) {
       vec2 e1=vP.xy-vec2(0.17,1.32);vec2 e2=vP.xy-vec2(-0.17,1.32);
       float eye=smoothstep(0.13,0.05,min(length(e1),length(e2)))*step(0.0,vP.z);
       float mouth=smoothstep(0.12,0.04,length((vP.xy-vec2(0.0,1.0))*vec2(1.0,0.6)))*step(0.0,vP.z);
-      a*=(1.0-0.95*eye)*(1.0-0.8*mouth);vec3 col=mix(uTint,vec3(1.0),f*0.6);gl_FragColor=vec4(col*0.85,a);}`,
+      a*=(1.0-0.95*eye)*(1.0-0.8*mouth);vec3 col=mix(uTint,vec3(1.0),f*0.6);gl_FragColor=vec4(col*0.85*uMul,a*uMul);}`,
   });
   ghost.add(new THREE.Mesh(new THREE.LatheGeometry(prof, 48), gmat));
-  const gLight = new THREE.PointLight(0x79e0c4, 30, 10, 1.5); gLight.position.set(0, 2.2, -2.4); scene.add(gLight);
+  const gLight = new THREE.PointLight(hex, 30, 10, 1.5); gLight.position.set(0, 2.2, -2.4); scene.add(gLight);
   const GP = 260; const gpos = new Float32Array(GP * 3); const gpart = [];
   for (let i = 0; i < GP; i++) gpart.push({ a: Math.random() * 6.283, h: Math.random() * 2.4 - 0.2, r: 0.7 + Math.random() * 0.8, v: 0.4 + Math.random() * 1.1 });
   const pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.BufferAttribute(gpos, 3));
-  const pmat = new THREE.PointsMaterial({ size: 0.11, map: soft, color: 0x79e0c4, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false });
+  const pmat = new THREE.PointsMaterial({ size: 0.11, map: soft, color: hex, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false });
   scene.add(new THREE.Points(pg, pmat));
+  return { ghost, gu, gLight, gpos, gpart, pg, pmat, GP, appear: 0, target: 0, glitch: 0, x: 0, tx: 0, speak: 1, tspeak: 1 };
+  }
+  const ghosts = [makeGhost(0x79e0c4), makeGhost(0xb48cff)];
 
   // Caméra pilotée
   const cam = { pos: new THREE.Vector3(0, 3.4, 11), look: new THREE.Vector3(0, 3.4, -8), tp: new THREE.Vector3(0, 3.4, 11), tl: new THREE.Vector3(0, 3.4, -8) };
@@ -158,11 +163,12 @@ export function createScene(canvas) {
     wide: [[0, 3.4, 11], [0, 3.4, -8]],
     intro: [[0, 3.0, 6.5], [0, 3.0, -8]],
     witness: [[0, 2.8, 2.6], [0, 2.8, -6]],
+    duel: [[0, 3.0, 3.4], [0, 2.7, -6]],
     judge: [[0, 3.2, -4.8], [0, 3.5, -12.5]],
   };
   const shot = (n) => { cam.tp.set(...shots[n][0]); cam.tl.set(...shots[n][1]); };
 
-  let appear = 0, appearTarget = 0, glitch = 0, gavelHit = 0, t0 = performance.now(), last = t0, flashMs = 0, running = true;
+  let gavelHit = 0, t0 = performance.now(), last = t0, flashMs = 0, running = true;
   function resize() {
     const w = canvas.clientWidth || innerWidth, h = canvas.clientHeight || innerHeight;
     renderer.setSize(w, h, false); camera.aspect = w / h; camera.fov = w / h < 0.8 ? 74 : 58; camera.updateProjectionMatrix();
@@ -172,14 +178,17 @@ export function createScene(canvas) {
   function frame(now) {
     if (!running) return;
     const dt = Math.min(0.05, (now - last) / 1000); last = now; const t = (now - t0) / 1000;
-    gu.uTime.value = t;
-    appear += (appearTarget - appear) * Math.min(1, dt * 1.6); gu.uAppear.value = appear;
-    ghost.visible = appear > 0.01; pmat.opacity = appear * 0.7;
-    glitch = Math.max(0, glitch - dt * 2.2); gu.uGlitch.value = glitch;
-    ghost.position.y = 1.9 + Math.sin(t * 1.3) * 0.12; ghost.rotation.y = Math.sin(t * 0.4) * 0.12;
-    gLight.intensity = 30 * appear * (0.85 + 0.15 * Math.sin(t * 7));
-    for (let i = 0; i < GP; i++) { const p = gpart[i]; p.a += dt * p.v; gpos[i * 3] = Math.cos(p.a) * p.r; gpos[i * 3 + 1] = 1.9 + p.h + Math.sin(t + i) * 0.1; gpos[i * 3 + 2] = -3.4 + Math.sin(p.a) * p.r; }
-    pg.attributes.position.needsUpdate = true;
+    uTime.value = t;
+    ghosts.forEach((g, gi) => {
+      g.appear += (g.target - g.appear) * Math.min(1, dt * 1.6); g.gu.uAppear.value = g.appear;
+      g.x += (g.tx - g.x) * Math.min(1, dt * 2.5); g.speak += (g.tspeak - g.speak) * Math.min(1, dt * 5); g.gu.uMul.value = g.speak;
+      g.ghost.visible = g.appear > 0.01; g.pmat.opacity = g.appear * 0.7 * g.speak;
+      g.glitch = Math.max(0, g.glitch - dt * 2.2); g.gu.uGlitch.value = g.glitch;
+      g.ghost.position.set(g.x, 1.9 + Math.sin(t * 1.3 + gi) * 0.12, -3.4); g.ghost.rotation.y = Math.sin(t * 0.4 + gi) * 0.12 + (g.tx === 0 ? 0 : -Math.sign(g.tx) * 0.35);
+      g.gLight.position.x = g.x; g.gLight.intensity = 30 * g.appear * g.speak * (0.85 + 0.15 * Math.sin(t * 7));
+      for (let i = 0; i < g.GP; i++) { const p = g.gpart[i]; p.a += dt * p.v; g.gpos[i * 3] = g.x + Math.cos(p.a) * p.r; g.gpos[i * 3 + 1] = 1.9 + p.h + Math.sin(t + i) * 0.1; g.gpos[i * 3 + 2] = -3.4 + Math.sin(p.a) * p.r; }
+      g.pg.attributes.position.needsUpdate = true;
+    });
     for (const f of flames) { const k = 0.8 + 0.2 * Math.sin(t * 9 + f.seed) * Math.sin(t * 5.3 + f.seed * 2); f.light.intensity = 7 * k; f.flame.scale.set(0.75 * k, 0.95 * k, 1); }
     gavelHit = Math.max(0, gavelHit - dt * 3); gavel.rotation.x = -0.5 + gavelHit * 0.9;
     const pa = dust.geometry.attributes.position; for (let i = 0; i < DUST; i++) { pa.array[i * 3 + 1] += dt * 0.12; if (pa.array[i * 3 + 1] > 11) pa.array[i * 3 + 1] = 0; } pa.needsUpdate = true;
@@ -198,9 +207,17 @@ export function createScene(canvas) {
 
   return {
     shot,
-    summon(hex) { gu.uTint.value.setHex(hex); pmat.color.setHex(hex); gLight.color.setHex(hex); appear = 0; appearTarget = 1; },
-    banish() { appearTarget = 0; },
-    glitch() { glitch = 1; },
+    summon(hex) {
+      const g = ghosts[0]; g.gu.uTint.value.setHex(hex); g.pmat.color.setHex(hex); g.gLight.color.setHex(hex);
+      g.appear = 0; g.target = 1; g.tx = 0; g.x = 0; g.tspeak = g.speak = 1; ghosts[1].target = 0;
+    },
+    // Deux fantômes face à face ; speak(i) éclaire celui qui parle et assombrit l'autre.
+    summonDuel(hexA, hexB) {
+      [hexA, hexB].forEach((hex, i) => { const g = ghosts[i]; g.gu.uTint.value.setHex(hex); g.pmat.color.setHex(hex); g.gLight.color.setHex(hex); g.appear = 0; g.target = 1; g.x = 0; g.tx = i ? 2.4 : -2.4; g.tspeak = 1; });
+    },
+    speak(i) { ghosts.forEach((g, gi) => { g.tspeak = gi === i ? 1 : 0.4; }); },
+    banish() { ghosts.forEach((g) => { g.target = 0; g.tspeak = 1; }); },
+    glitch(i) { (i === undefined ? ghosts : [ghosts[i]]).forEach((g) => { g.glitch = 1; }); },
     gavel() { gavelHit = 1; },
   };
 }

@@ -7,6 +7,7 @@ import { assertRepo, allCommits, groupByAuthor } from './git.js';
 import { gatherFacts, judge } from './facts.js';
 import { summon } from './witness.js';
 import { render } from './verdict.js';
+import { duel, bestPair } from './duel.js';
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const PUBLIC = join(ROOT, 'public');
@@ -70,6 +71,18 @@ const server = http.createServer(async (req, res) => {
       const { repo = DEFAULT_REPO, author, perjury } = await readJson(req);
       const c = await load(resolve(repo));
       return send(res, 200, await summon(resolve(repo), author, c.commits, { perjury: Boolean(perjury) }));
+    }
+    if (url.pathname === '/api/duel' && req.method === 'POST') {
+      const { repo = DEFAULT_REPO, perjury, a: wantA, b: wantB } = await readJson(req);
+      let a = wantA, b = wantB;
+      const r = resolve(repo);
+      const c = await load(r);
+      if (!a || !b) {
+        const pair = await bestPair(r, dedupe(c.authors).slice(0, 3).map((x) => x.name));
+        if (!pair) throw new Error('Aucun couple de témoins ne partage un fichier.');
+        ({ a, b } = pair);
+      }
+      return send(res, 200, await duel(r, a, b, { perjury: Boolean(perjury) }));
     }
     if (url.pathname === '/api/verdict' && req.method === 'POST') {
       const { repo = DEFAULT_REPO } = await readJson(req);
