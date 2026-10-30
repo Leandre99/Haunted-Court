@@ -4,3 +4,4 @@ verdicts/
 .env
 *.log
 *.log
+shot-*.png
