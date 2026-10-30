@@ -46,7 +46,7 @@ export async function render(repo, facts, tally, lang = 'en') {
   const tmp = await mkdtemp(join(tmpdir(), 'haunted-'));
   try {
     const clone = join(tmp, name);
-    await run('git', ['clone', '-q', '--local', resolve(repo), clone]);
+    await run('git', ['clone', '-q', '--local', '--no-hardlinks', resolve(repo), clone]);
     await run('git', ['-C', clone, 'checkout', '-q', '-b', 'haunted-court/verdict']);
     await writeFile(join(clone, 'MIGRATION_PLAN.md'), md);
     await run('git', ['-C', clone, 'add', 'MIGRATION_PLAN.md']);
@@ -54,7 +54,7 @@ export async function render(repo, facts, tally, lang = 'en') {
     const { stdout } = await run('git', ['-C', clone, 'log', '-1', '--format=%h %s']);
     const dest = join(outDir, `${name}-verdict.git`);
     await rm(dest, { recursive: true, force: true });
-    await run('git', ['clone', '-q', '--bare', clone, dest]);
+    await run('git', ['clone', '-q', '--bare', '--no-hardlinks', clone, dest]);
     return {
       artifact: 'branch',
       path: dest,
