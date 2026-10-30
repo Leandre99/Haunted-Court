@@ -13,7 +13,13 @@ import { t, normLang } from './i18n.js';
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const PUBLIC = join(ROOT, 'public');
 const PORT = Number(process.env.PORT || 3000);
+// Hébergement public : on écoute sur toutes les interfaces et on ne juge QUE le dépôt de démonstration
+// (sinon n'importe qui pourrait demander au serveur de lire un chemin arbitraire).
+const HOST = process.env.HOST || '127.0.0.1';
+const PUBLIC_MODE = process.env.HC_PUBLIC === '1';
 const DEFAULT_REPO = existsSync(join(ROOT, 'demo', 'django-userena', '.git')) ? join(ROOT, 'demo', 'django-userena') : ROOT;
+
+const repoOf = (wanted) => (PUBLIC_MODE ? DEFAULT_REPO : resolve(wanted || DEFAULT_REPO));
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json' };
 
@@ -55,7 +61,7 @@ const server = http.createServer(async (req, res) => {
   let lang = normLang(url.searchParams.get('lang'));
   try {
     if (url.pathname === '/api/case' && req.method === 'GET') {
-      const repo = resolve(url.searchParams.get('repo') || DEFAULT_REPO);
+      const repo = repoOf(url.searchParams.get('repo'));
       const c = await load(repo, lang);
       const first = c.commits[c.commits.length - 1].date.slice(0, 4);
       const last = c.commits[0].date.slice(0, 4);
@@ -72,14 +78,14 @@ const server = http.createServer(async (req, res) => {
     if (url.pathname === '/api/testimony' && req.method === 'POST') {
       const body = await readJson(req);
       lang = normLang(body.lang);
-      const repo = resolve(body.repo || DEFAULT_REPO);
+      const repo = repoOf(body.repo);
       const c = await load(repo, lang);
       return send(res, 200, await summon(repo, body.author, c.commits, { perjury: Boolean(body.perjury), lang }));
     }
     if (url.pathname === '/api/duel' && req.method === 'POST') {
       const body = await readJson(req);
       lang = normLang(body.lang);
-      const r = resolve(body.repo || DEFAULT_REPO);
+      const r = repoOf(body.repo);
       const c = await load(r, lang);
       let { a, b } = body;
       if (!a || !b) {
@@ -92,11 +98,12 @@ const server = http.createServer(async (req, res) => {
     if (url.pathname === '/api/verdict' && req.method === 'POST') {
       const body = await readJson(req);
       lang = normLang(body.lang);
-      const r = resolve(body.repo || DEFAULT_REPO);
+      const r = repoOf(body.repo);
       const c = await load(r, lang);
       const tally = judge(c.facts);
       return send(res, 200, { ...tally, ...(await render(r, localizeFacts(c.facts, lang), tally, lang)) });
     }
+    if (url.pathname === '/healthz') return send(res, 200, 'ok', 'text/plain');
     if (url.pathname.startsWith('/api/')) return send(res, 404, { error: 'not found' });
 
     // fichiers statiques
@@ -110,6 +117,6 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, '127.0.0.1', () => {
-  console.log(`Haunted Court: http://127.0.0.1:${PORT}  (default repository: ${DEFAULT_REPO})`);
+server.listen(PORT, HOST, () => {
+  console.log(`Haunted Court: http://${HOST}:${PORT}  (default repository: ${DEFAULT_REPO}${PUBLIC_MODE ? ', public mode' : ''})`);
 });

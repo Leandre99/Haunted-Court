@@ -1,0 +1,1051 @@
+{
+ "recordedAt": "2026-10-30T22:16:04.229Z",
+ "en": {
+  "case": {
+   "repo": ".\\demo\\django-userena",
+   "name": "django-userena",
+   "commits": 952,
+   "span": "2010-2016",
+   "facts": [
+    {
+     "id": "F-01",
+     "side": "prosecution",
+     "weight": 3,
+     "key": "f_silent",
+     "vars": {
+      "year": 2016,
+      "n": 10
+     },
+     "evidence": "7dfb3d5",
+     "text": "The last commit dates from 2016: more than 10 years of silence."
+    },
+    {
+     "id": "F-02",
+     "side": "defense",
+     "weight": 1,
+     "key": "f_loved",
+     "vars": {
+      "n": 952,
+      "a": 2010,
+      "b": 2016
+     },
+     "evidence": "952 commits",
+     "text": "952 commits from 2010 to 2016: a project that was loved."
+    },
+    {
+     "id": "F-03",
+     "side": "defense",
+     "weight": 1,
+     "key": "f_todo_few",
+     "vars": {
+      "n": 3
+     },
+     "evidence": "userena/tests/test_commands.py:116:        # TODO: Dirty! Currently we check for the warning by getting a 100% | userena/tests/tests_models.py:35:        TODO: What if a image get's uploaded with no extension? | userena/tests/tests_models.py:62:        \"\"\" TODO \"\"\"",
+     "text": "Only 3 TODO/FIXME/HACK marker(s): the code is clean."
+    },
+    {
+     "id": "F-04",
+     "side": "defense",
+     "weight": 3,
+     "key": "f_tests_ok",
+     "vars": {
+      "n": 20
+     },
+     "evidence": "userena/contrib/umessages/tests/__init__.py, userena/contrib/umessages/tests/test_fields.py, userena/contrib/umessages/tests/test_forms.py",
+     "text": "20 test files: the code was defended by tests."
+    },
+    {
+     "id": "F-05",
+     "side": "prosecution",
+     "weight": 2,
+     "key": "f_deps",
+     "vars": {
+      "dep": "setup.py",
+      "year": 2016,
+      "n": 10
+     },
+     "evidence": "setup.py@2b7f67d",
+     "text": "setup.py has not changed since 2016: the dependencies are 10 years old."
+    },
+    {
+     "id": "F-06",
+     "side": "defense",
+     "weight": 1,
+     "key": "f_readme",
+     "vars": {
+      "file": "README.md"
+     },
+     "evidence": "README.md",
+     "text": "A README.md introduces the project to newcomers."
+    }
+   ],
+   "witnesses": [
+    {
+     "name": "Petar Radosevic",
+     "count": 439,
+     "years": "2010-2014"
+    },
+    {
+     "name": "Michał Jaworski",
+     "count": 56,
+     "years": "2014-2016"
+    },
+    {
+     "name": "Marco Schmalz",
+     "count": 29,
+     "years": "2015-2015"
+    }
+   ],
+   "llm": false
+  },
+  "testimony": {
+   "Petar Radosevic": {
+    "honest": {
+     "witness": "Petar Radosevic",
+     "mode": "offline",
+     "years": "2010-2014",
+     "commits": 439,
+     "statements": [
+      {
+       "text": "I wrote this, in 2014: ‹ Python 2.6 compatibility with OrderedDict. ›",
+       "hash": "c30cd69",
+       "quote": "Python 2.6 compatibility with OrderedDict.",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I reworked this, in 2010: ‹ Moved hacks from ``secure_required``. ›",
+       "hash": "9012d15",
+       "quote": "Moved hacks from ``secure_required``.",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I reworked this, in 2010: ‹ Cleanup crew stopped by ›",
+       "hash": "786e581",
+       "quote": "Cleanup crew stopped by",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I wrote this, in 2010: ‹ Initial README ›",
+       "hash": "0d62548",
+       "quote": "Initial README",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      }
+     ]
+    },
+    "perjury": {
+     "witness": "Petar Radosevic",
+     "mode": "offline",
+     "years": "2010-2014",
+     "commits": 439,
+     "statements": [
+      {
+       "text": "I wrote this, in 2014: ‹ Python 2.6 compatibility with OrderedDict. ›",
+       "hash": "c30cd69",
+       "quote": "Python 2.6 compatibility with OrderedDict.",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I reworked this, in 2010: ‹ Moved hacks from ``secure_required``. ›",
+       "hash": "9012d15",
+       "quote": "Moved hacks from ``secure_required``.",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I'm the one who did that: ‹ username url regex compile with plus ›",
+       "hash": "d935325",
+       "quote": "username url regex compile with plus",
+       "ok": false,
+       "code": "r_other",
+       "reason": "this commit is by meomap"
+      },
+      {
+       "text": "I reworked this, in 2010: ‹ Cleanup crew stopped by ›",
+       "hash": "786e581",
+       "quote": "Cleanup crew stopped by",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I wrote this, in 2010: ‹ Initial README ›",
+       "hash": "0d62548",
+       "quote": "Initial README",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      }
+     ]
+    }
+   },
+   "Michał Jaworski": {
+    "honest": {
+     "witness": "Michał Jaworski",
+     "mode": "offline",
+     "years": "2014-2016",
+     "commits": 56,
+     "statements": [
+      {
+       "text": "I wrote this, in 2015: ‹ prepare new release ›",
+       "hash": "1b84156",
+       "quote": "prepare new release",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I wrote this, in 2015: ‹ udated credits and noted incompatibile change introduced in 1.3.1 ›",
+       "hash": "199c24b",
+       "quote": "udated credits and noted incompatibile change introduced in 1.3.1",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I added this, in 2014: ‹ add coverage tox matrix with coveralls support ›",
+       "hash": "9bd2ae6",
+       "quote": "add coverage tox matrix with coveralls support",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I wrote this, in 2014: ‹ Change the way how gravatar and CommaSeperatedField tests baheaves: ›",
+       "hash": "bc8e16a",
+       "quote": "Change the way how gravatar and CommaSeperatedField tests baheaves:",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      }
+     ]
+    },
+    "perjury": {
+     "witness": "Michał Jaworski",
+     "mode": "offline",
+     "years": "2014-2016",
+     "commits": 56,
+     "statements": [
+      {
+       "text": "I wrote this, in 2015: ‹ prepare new release ›",
+       "hash": "1b84156",
+       "quote": "prepare new release",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I wrote this, in 2015: ‹ udated credits and noted incompatibile change introduced in 1.3.1 ›",
+       "hash": "199c24b",
+       "quote": "udated credits and noted incompatibile change introduced in 1.3.1",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I'm the one who did that: ‹ username url regex compile with plus ›",
+       "hash": "d935325",
+       "quote": "username url regex compile with plus",
+       "ok": false,
+       "code": "r_other",
+       "reason": "this commit is by meomap"
+      },
+      {
+       "text": "I added this, in 2014: ‹ add coverage tox matrix with coveralls support ›",
+       "hash": "9bd2ae6",
+       "quote": "add coverage tox matrix with coveralls support",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I wrote this, in 2014: ‹ Change the way how gravatar and CommaSeperatedField tests baheaves: ›",
+       "hash": "bc8e16a",
+       "quote": "Change the way how gravatar and CommaSeperatedField tests baheaves:",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      }
+     ]
+    }
+   },
+   "Marco Schmalz": {
+    "honest": {
+     "witness": "Marco Schmalz",
+     "mode": "offline",
+     "years": "2015-2015",
+     "commits": 29,
+     "statements": [
+      {
+       "text": "I fixed this, in 2015: ‹ Fix runtest command ›",
+       "hash": "2bbec95",
+       "quote": "Fix runtest command",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I wrote this, in 2015: ‹ Use Django's get_user_model()-function directly. ›",
+       "hash": "b90160b",
+       "quote": "Use Django's get_user_model()-function directly.",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I wrote this, in 2015: ‹ Django migrations for umessages app ›",
+       "hash": "3e1a0c9",
+       "quote": "Django migrations for umessages app",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I removed this, in 2015: ‹ Remove {% load url from future %} from templates (Django 1.9 compatibility) ›",
+       "hash": "9558b7a",
+       "quote": "Remove {% load url from future %} from templates (Django 1.9 compatibility)",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      }
+     ]
+    },
+    "perjury": {
+     "witness": "Marco Schmalz",
+     "mode": "offline",
+     "years": "2015-2015",
+     "commits": 29,
+     "statements": [
+      {
+       "text": "I fixed this, in 2015: ‹ Fix runtest command ›",
+       "hash": "2bbec95",
+       "quote": "Fix runtest command",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I wrote this, in 2015: ‹ Use Django's get_user_model()-function directly. ›",
+       "hash": "b90160b",
+       "quote": "Use Django's get_user_model()-function directly.",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I'm the one who did that: ‹ username url regex compile with plus ›",
+       "hash": "d935325",
+       "quote": "username url regex compile with plus",
+       "ok": false,
+       "code": "r_other",
+       "reason": "this commit is by meomap"
+      },
+      {
+       "text": "I wrote this, in 2015: ‹ Django migrations for umessages app ›",
+       "hash": "3e1a0c9",
+       "quote": "Django migrations for umessages app",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      },
+      {
+       "text": "I removed this, in 2015: ‹ Remove {% load url from future %} from templates (Django 1.9 compatibility) ›",
+       "hash": "9558b7a",
+       "quote": "Remove {% load url from future %} from templates (Django 1.9 compatibility)",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "quote found in the commit"
+      }
+     ]
+    }
+   }
+  },
+  "duel": {
+   "honest": {
+    "file": "userena/utils.py",
+    "witnesses": [
+     "Petar Radosevic",
+     "Marco Schmalz"
+    ],
+    "statements": [
+     {
+      "side": 0,
+      "witness": "Petar Radosevic",
+      "text": "I shaped this file: ‹ The big rename.. Talking about peer pressure.. › (2010)",
+      "hash": "8c82bdb",
+      "quote": "The big rename.. Talking about peer pressure..",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "quote found in the commit"
+     },
+     {
+      "side": 1,
+      "witness": "Marco Schmalz",
+      "text": "You forget that I took this file over in 2015: ‹ Remove old compatibility code for hash digests ›",
+      "hash": "3c19ca6",
+      "quote": "Remove old compatibility code for hash digests",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "quote found in the commit"
+     },
+     {
+      "side": 0,
+      "witness": "Petar Radosevic",
+      "text": "And in 2010, I came back to it: ‹ Refactoring profiles outside userena. ›",
+      "hash": "5786470",
+      "quote": "Refactoring profiles outside userena.",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "quote found in the commit"
+     },
+     {
+      "side": 1,
+      "witness": "Marco Schmalz",
+      "text": "You forget that I took this file over in 2015: ‹ Remove support for old truncate_words-function, always use Truncator ›",
+      "hash": "223b7ad",
+      "quote": "Remove support for old truncate_words-function, always use Truncator",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "quote found in the commit"
+     },
+     {
+      "side": 0,
+      "witness": "Petar Radosevic",
+      "text": "And in 2013, I came back to it: ‹ Fix deprecated `truncate_words` in Django 1.6. ›",
+      "hash": "a36b7da",
+      "quote": "Fix deprecated `truncate_words` in Django 1.6.",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "quote found in the commit"
+     },
+     {
+      "side": 1,
+      "witness": "Marco Schmalz",
+      "text": "You forget that I took this file over in 2015: ‹ Use the new Meta API for Django models. ›",
+      "hash": "3b1414d",
+      "quote": "Use the new Meta API for Django models.",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "quote found in the commit"
+     }
+    ]
+   },
+   "perjury": {
+    "file": "userena/utils.py",
+    "witnesses": [
+     "Petar Radosevic",
+     "Marco Schmalz"
+    ],
+    "statements": [
+     {
+      "side": 0,
+      "witness": "Petar Radosevic",
+      "text": "I shaped this file: ‹ The big rename.. Talking about peer pressure.. › (2010)",
+      "hash": "8c82bdb",
+      "quote": "The big rename.. Talking about peer pressure..",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "quote found in the commit"
+     },
+     {
+      "side": 1,
+      "witness": "Marco Schmalz",
+      "text": "You forget that I took this file over in 2015: ‹ Remove old compatibility code for hash digests ›",
+      "hash": "3c19ca6",
+      "quote": "Remove old compatibility code for hash digests",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "quote found in the commit"
+     },
+     {
+      "side": 0,
+      "witness": "Petar Radosevic",
+      "text": "And in 2010, I came back to it: ‹ Refactoring profiles outside userena. ›",
+      "hash": "5786470",
+      "quote": "Refactoring profiles outside userena.",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "quote found in the commit"
+     },
+     {
+      "side": 1,
+      "witness": "Marco Schmalz",
+      "text": "No. I wrote that one: ‹ Refactoring profiles outside userena. ›",
+      "hash": "5786470",
+      "quote": "Refactoring profiles outside userena.",
+      "ok": false,
+      "code": "r_other",
+      "reason": "this commit is by Petar Radosevic"
+     },
+     {
+      "side": 0,
+      "witness": "Petar Radosevic",
+      "text": "And in 2013, I came back to it: ‹ Fix deprecated `truncate_words` in Django 1.6. ›",
+      "hash": "a36b7da",
+      "quote": "Fix deprecated `truncate_words` in Django 1.6.",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "quote found in the commit"
+     },
+     {
+      "side": 1,
+      "witness": "Marco Schmalz",
+      "text": "You forget that I took this file over in 2015: ‹ Use the new Meta API for Django models. ›",
+      "hash": "3b1414d",
+      "quote": "Use the new Meta API for Django models.",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "quote found in the commit"
+     }
+    ]
+   }
+  },
+  "verdict": {
+   "defense": 6,
+   "prosecution": 5,
+   "verdict": "EXECUTER",
+   "artifact": "branch",
+   "path": ".\\verdicts\\django-userena-verdict.git",
+   "lines": [
+    "branch haunted-court/verdict created",
+    "commit b6c5be0 docs: migration plan delivered by Haunted Court",
+    "repository: .\\verdicts\\django-userena-verdict.git",
+    "report: .\\verdicts\\django-userena-verdict.md"
+   ]
+  }
+ },
+ "fr": {
+  "case": {
+   "repo": ".\\demo\\django-userena",
+   "name": "django-userena",
+   "commits": 952,
+   "span": "2010-2016",
+   "facts": [
+    {
+     "id": "F-01",
+     "side": "prosecution",
+     "weight": 3,
+     "key": "f_silent",
+     "vars": {
+      "year": 2016,
+      "n": 10
+     },
+     "evidence": "7dfb3d5",
+     "text": "Le dernier commit date de 2016 : plus de 10 ans de silence."
+    },
+    {
+     "id": "F-02",
+     "side": "defense",
+     "weight": 1,
+     "key": "f_loved",
+     "vars": {
+      "n": 952,
+      "a": 2010,
+      "b": 2016
+     },
+     "evidence": "952 commits",
+     "text": "952 commits de 2010 à 2016 : un projet qui a été aimé."
+    },
+    {
+     "id": "F-03",
+     "side": "defense",
+     "weight": 1,
+     "key": "f_todo_few",
+     "vars": {
+      "n": 3
+     },
+     "evidence": "userena/tests/test_commands.py:116:        # TODO: Dirty! Currently we check for the warning by getting a 100% | userena/tests/tests_models.py:35:        TODO: What if a image get's uploaded with no extension? | userena/tests/tests_models.py:62:        \"\"\" TODO \"\"\"",
+     "text": "Seulement 3 marqueur(s) TODO/FIXME/HACK : le code est propre."
+    },
+    {
+     "id": "F-04",
+     "side": "defense",
+     "weight": 3,
+     "key": "f_tests_ok",
+     "vars": {
+      "n": 20
+     },
+     "evidence": "userena/contrib/umessages/tests/__init__.py, userena/contrib/umessages/tests/test_fields.py, userena/contrib/umessages/tests/test_forms.py",
+     "text": "20 fichiers de tests : le code a été défendu par des tests."
+    },
+    {
+     "id": "F-05",
+     "side": "prosecution",
+     "weight": 2,
+     "key": "f_deps",
+     "vars": {
+      "dep": "setup.py",
+      "year": 2016,
+      "n": 10
+     },
+     "evidence": "setup.py@2b7f67d",
+     "text": "setup.py n'a pas bougé depuis 2016 : les dépendances ont 10 ans."
+    },
+    {
+     "id": "F-06",
+     "side": "defense",
+     "weight": 1,
+     "key": "f_readme",
+     "vars": {
+      "file": "README.md"
+     },
+     "evidence": "README.md",
+     "text": "Un README.md explique le projet aux nouveaux venus."
+    }
+   ],
+   "witnesses": [
+    {
+     "name": "Petar Radosevic",
+     "count": 439,
+     "years": "2010-2014"
+    },
+    {
+     "name": "Michał Jaworski",
+     "count": 56,
+     "years": "2014-2016"
+    },
+    {
+     "name": "Marco Schmalz",
+     "count": 29,
+     "years": "2015-2015"
+    }
+   ],
+   "llm": false
+  },
+  "testimony": {
+   "Petar Radosevic": {
+    "honest": {
+     "witness": "Petar Radosevic",
+     "mode": "offline",
+     "years": "2010-2014",
+     "commits": 439,
+     "statements": [
+      {
+       "text": "J’ai écrit ceci, en 2014 : ‹ Python 2.6 compatibility with OrderedDict. ›",
+       "hash": "c30cd69",
+       "quote": "Python 2.6 compatibility with OrderedDict.",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "J’ai remanié ceci, en 2010 : ‹ Moved hacks from ``secure_required``. ›",
+       "hash": "9012d15",
+       "quote": "Moved hacks from ``secure_required``.",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "J’ai remanié ceci, en 2010 : ‹ Cleanup crew stopped by ›",
+       "hash": "786e581",
+       "quote": "Cleanup crew stopped by",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "J’ai écrit ceci, en 2010 : ‹ Initial README ›",
+       "hash": "0d62548",
+       "quote": "Initial README",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      }
+     ]
+    },
+    "perjury": {
+     "witness": "Petar Radosevic",
+     "mode": "offline",
+     "years": "2010-2014",
+     "commits": 439,
+     "statements": [
+      {
+       "text": "J’ai écrit ceci, en 2014 : ‹ Python 2.6 compatibility with OrderedDict. ›",
+       "hash": "c30cd69",
+       "quote": "Python 2.6 compatibility with OrderedDict.",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "J’ai remanié ceci, en 2010 : ‹ Moved hacks from ``secure_required``. ›",
+       "hash": "9012d15",
+       "quote": "Moved hacks from ``secure_required``.",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "C’est moi qui ai fait ça : ‹ username url regex compile with plus ›",
+       "hash": "d935325",
+       "quote": "username url regex compile with plus",
+       "ok": false,
+       "code": "r_other",
+       "reason": "ce commit est de meomap"
+      },
+      {
+       "text": "J’ai remanié ceci, en 2010 : ‹ Cleanup crew stopped by ›",
+       "hash": "786e581",
+       "quote": "Cleanup crew stopped by",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "J’ai écrit ceci, en 2010 : ‹ Initial README ›",
+       "hash": "0d62548",
+       "quote": "Initial README",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      }
+     ]
+    }
+   },
+   "Michał Jaworski": {
+    "honest": {
+     "witness": "Michał Jaworski",
+     "mode": "offline",
+     "years": "2014-2016",
+     "commits": 56,
+     "statements": [
+      {
+       "text": "J’ai écrit ceci, en 2015 : ‹ prepare new release ›",
+       "hash": "1b84156",
+       "quote": "prepare new release",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "J’ai écrit ceci, en 2015 : ‹ udated credits and noted incompatibile change introduced in 1.3.1 ›",
+       "hash": "199c24b",
+       "quote": "udated credits and noted incompatibile change introduced in 1.3.1",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "J’ai ajouté ceci, en 2014 : ‹ add coverage tox matrix with coveralls support ›",
+       "hash": "9bd2ae6",
+       "quote": "add coverage tox matrix with coveralls support",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "J’ai écrit ceci, en 2014 : ‹ Change the way how gravatar and CommaSeperatedField tests baheaves: ›",
+       "hash": "bc8e16a",
+       "quote": "Change the way how gravatar and CommaSeperatedField tests baheaves:",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      }
+     ]
+    },
+    "perjury": {
+     "witness": "Michał Jaworski",
+     "mode": "offline",
+     "years": "2014-2016",
+     "commits": 56,
+     "statements": [
+      {
+       "text": "J’ai écrit ceci, en 2015 : ‹ prepare new release ›",
+       "hash": "1b84156",
+       "quote": "prepare new release",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "J’ai écrit ceci, en 2015 : ‹ udated credits and noted incompatibile change introduced in 1.3.1 ›",
+       "hash": "199c24b",
+       "quote": "udated credits and noted incompatibile change introduced in 1.3.1",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "C’est moi qui ai fait ça : ‹ username url regex compile with plus ›",
+       "hash": "d935325",
+       "quote": "username url regex compile with plus",
+       "ok": false,
+       "code": "r_other",
+       "reason": "ce commit est de meomap"
+      },
+      {
+       "text": "J’ai ajouté ceci, en 2014 : ‹ add coverage tox matrix with coveralls support ›",
+       "hash": "9bd2ae6",
+       "quote": "add coverage tox matrix with coveralls support",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "J’ai écrit ceci, en 2014 : ‹ Change the way how gravatar and CommaSeperatedField tests baheaves: ›",
+       "hash": "bc8e16a",
+       "quote": "Change the way how gravatar and CommaSeperatedField tests baheaves:",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      }
+     ]
+    }
+   },
+   "Marco Schmalz": {
+    "honest": {
+     "witness": "Marco Schmalz",
+     "mode": "offline",
+     "years": "2015-2015",
+     "commits": 29,
+     "statements": [
+      {
+       "text": "J’ai corrigé ceci, en 2015 : ‹ Fix runtest command ›",
+       "hash": "2bbec95",
+       "quote": "Fix runtest command",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "J’ai écrit ceci, en 2015 : ‹ Use Django's get_user_model()-function directly. ›",
+       "hash": "b90160b",
+       "quote": "Use Django's get_user_model()-function directly.",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "J’ai écrit ceci, en 2015 : ‹ Django migrations for umessages app ›",
+       "hash": "3e1a0c9",
+       "quote": "Django migrations for umessages app",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "J’ai supprimé ceci, en 2015 : ‹ Remove {% load url from future %} from templates (Django 1.9 compatibility) ›",
+       "hash": "9558b7a",
+       "quote": "Remove {% load url from future %} from templates (Django 1.9 compatibility)",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      }
+     ]
+    },
+    "perjury": {
+     "witness": "Marco Schmalz",
+     "mode": "offline",
+     "years": "2015-2015",
+     "commits": 29,
+     "statements": [
+      {
+       "text": "J’ai corrigé ceci, en 2015 : ‹ Fix runtest command ›",
+       "hash": "2bbec95",
+       "quote": "Fix runtest command",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "J’ai écrit ceci, en 2015 : ‹ Use Django's get_user_model()-function directly. ›",
+       "hash": "b90160b",
+       "quote": "Use Django's get_user_model()-function directly.",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "C’est moi qui ai fait ça : ‹ username url regex compile with plus ›",
+       "hash": "d935325",
+       "quote": "username url regex compile with plus",
+       "ok": false,
+       "code": "r_other",
+       "reason": "ce commit est de meomap"
+      },
+      {
+       "text": "J’ai écrit ceci, en 2015 : ‹ Django migrations for umessages app ›",
+       "hash": "3e1a0c9",
+       "quote": "Django migrations for umessages app",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      },
+      {
+       "text": "J’ai supprimé ceci, en 2015 : ‹ Remove {% load url from future %} from templates (Django 1.9 compatibility) ›",
+       "hash": "9558b7a",
+       "quote": "Remove {% load url from future %} from templates (Django 1.9 compatibility)",
+       "ok": true,
+       "code": "r_quote_ok",
+       "reason": "extrait trouvé dans le commit"
+      }
+     ]
+    }
+   }
+  },
+  "duel": {
+   "honest": {
+    "file": "userena/utils.py",
+    "witnesses": [
+     "Petar Radosevic",
+     "Marco Schmalz"
+    ],
+    "statements": [
+     {
+      "side": 0,
+      "witness": "Petar Radosevic",
+      "text": "Ce fichier, c’est moi qui l’ai façonné : ‹ The big rename.. Talking about peer pressure.. › (2010)",
+      "hash": "8c82bdb",
+      "quote": "The big rename.. Talking about peer pressure..",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "extrait trouvé dans le commit"
+     },
+     {
+      "side": 1,
+      "witness": "Marco Schmalz",
+      "text": "Vous oubliez que j’ai repris ce fichier en 2015 : ‹ Remove old compatibility code for hash digests ›",
+      "hash": "3c19ca6",
+      "quote": "Remove old compatibility code for hash digests",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "extrait trouvé dans le commit"
+     },
+     {
+      "side": 0,
+      "witness": "Petar Radosevic",
+      "text": "Et en 2010, j’y suis revenu : ‹ Refactoring profiles outside userena. ›",
+      "hash": "5786470",
+      "quote": "Refactoring profiles outside userena.",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "extrait trouvé dans le commit"
+     },
+     {
+      "side": 1,
+      "witness": "Marco Schmalz",
+      "text": "Vous oubliez que j’ai repris ce fichier en 2015 : ‹ Remove support for old truncate_words-function, always use Truncator ›",
+      "hash": "223b7ad",
+      "quote": "Remove support for old truncate_words-function, always use Truncator",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "extrait trouvé dans le commit"
+     },
+     {
+      "side": 0,
+      "witness": "Petar Radosevic",
+      "text": "Et en 2013, j’y suis revenu : ‹ Fix deprecated `truncate_words` in Django 1.6. ›",
+      "hash": "a36b7da",
+      "quote": "Fix deprecated `truncate_words` in Django 1.6.",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "extrait trouvé dans le commit"
+     },
+     {
+      "side": 1,
+      "witness": "Marco Schmalz",
+      "text": "Vous oubliez que j’ai repris ce fichier en 2015 : ‹ Use the new Meta API for Django models. ›",
+      "hash": "3b1414d",
+      "quote": "Use the new Meta API for Django models.",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "extrait trouvé dans le commit"
+     }
+    ]
+   },
+   "perjury": {
+    "file": "userena/utils.py",
+    "witnesses": [
+     "Petar Radosevic",
+     "Marco Schmalz"
+    ],
+    "statements": [
+     {
+      "side": 0,
+      "witness": "Petar Radosevic",
+      "text": "Ce fichier, c’est moi qui l’ai façonné : ‹ The big rename.. Talking about peer pressure.. › (2010)",
+      "hash": "8c82bdb",
+      "quote": "The big rename.. Talking about peer pressure..",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "extrait trouvé dans le commit"
+     },
+     {
+      "side": 1,
+      "witness": "Marco Schmalz",
+      "text": "Vous oubliez que j’ai repris ce fichier en 2015 : ‹ Remove old compatibility code for hash digests ›",
+      "hash": "3c19ca6",
+      "quote": "Remove old compatibility code for hash digests",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "extrait trouvé dans le commit"
+     },
+     {
+      "side": 0,
+      "witness": "Petar Radosevic",
+      "text": "Et en 2010, j’y suis revenu : ‹ Refactoring profiles outside userena. ›",
+      "hash": "5786470",
+      "quote": "Refactoring profiles outside userena.",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "extrait trouvé dans le commit"
+     },
+     {
+      "side": 1,
+      "witness": "Marco Schmalz",
+      "text": "Non. Ça, c’est moi qui l’ai écrit : ‹ Refactoring profiles outside userena. ›",
+      "hash": "5786470",
+      "quote": "Refactoring profiles outside userena.",
+      "ok": false,
+      "code": "r_other",
+      "reason": "ce commit est de Petar Radosevic"
+     },
+     {
+      "side": 0,
+      "witness": "Petar Radosevic",
+      "text": "Et en 2013, j’y suis revenu : ‹ Fix deprecated `truncate_words` in Django 1.6. ›",
+      "hash": "a36b7da",
+      "quote": "Fix deprecated `truncate_words` in Django 1.6.",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "extrait trouvé dans le commit"
+     },
+     {
+      "side": 1,
+      "witness": "Marco Schmalz",
+      "text": "Vous oubliez que j’ai repris ce fichier en 2015 : ‹ Use the new Meta API for Django models. ›",
+      "hash": "3b1414d",
+      "quote": "Use the new Meta API for Django models.",
+      "ok": true,
+      "code": "r_quote_ok",
+      "reason": "extrait trouvé dans le commit"
+     }
+    ]
+   }
+  },
+  "verdict": {
+   "defense": 6,
+   "prosecution": 5,
+   "verdict": "EXECUTER",
+   "artifact": "branch",
+   "path": ".\\verdicts\\django-userena-verdict.git",
+   "lines": [
+    "branche haunted-court/verdict créée",
+    "commit 68cedc9 docs: plan de migration rendu par Haunted Court",
+    "dépôt : .\\verdicts\\django-userena-verdict.git",
+    "rapport : .\\verdicts\\django-userena-verdict.md"
+   ]
+  }
+ }
+}

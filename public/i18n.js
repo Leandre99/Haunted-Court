@@ -22,6 +22,7 @@ const STR = {
     voice_sample: 'I am the ghost of this repository.',
     nogl: 'The courtroom 3D is not available on this device. The trial remains usable.',
     speak_lang: 'en',
+    recorded: 'recorded trial (run locally for live git)',
     no_backend: 'The game server is not reachable. Run "npm start" and open http://127.0.0.1:3000 (static hosting cannot serve /api).',
   },
   fr: {
@@ -46,6 +47,7 @@ const STR = {
     voice_sample: 'Je suis le fantôme de ce dépôt.',
     nogl: 'La 3D n’est pas disponible sur cet appareil. Le procès reste utilisable.',
     speak_lang: 'fr',
+    recorded: 'procès enregistré (lancez en local pour git en direct)',
     no_backend: 'Le serveur du jeu est injoignable. Lancez « npm start » puis ouvrez http://127.0.0.1:3000 (un hébergement statique ne peut pas servir /api).',
   },
 };

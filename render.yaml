@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: haunted-court
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz

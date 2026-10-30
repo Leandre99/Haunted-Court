@@ -36,11 +36,38 @@ if (audio.voiceAvailable()) {
 // Voix par fantôme : grave et lente pour le premier, plus aiguë pour celui qui lui répond.
 const VOICES = [{ pitch: 0.5, rate: 0.8 }, { pitch: 0.95, rate: 0.88 }, { pitch: 0.7, rate: 0.84 }];
 
+// Mode « procès enregistré » : sur un hébergement statique (pas de serveur Node), on rejoue un vrai procès
+// enregistré par scripts/record.js. Les phrases ont été vérifiées contre git au moment de l'enregistrement.
+let recorded = null;
+async function recordedApi(path, body) {
+  if (!recorded) {
+    const r = await fetch('/demo-data.json');
+    if (!r.ok || !(r.headers.get('content-type') || '').includes('json')) throw new Error(tr('no_backend'));
+    recorded = await r.json();
+  }
+  current.recorded = true;
+  const d = recorded[lang] ?? recorded.en;
+  if (path.startsWith('/api/case')) return d.case;
+  const variant = body?.perjury ? 'perjury' : 'honest';
+  if (path === '/api/testimony') {
+    const w = d.testimony[body.author];
+    if (!w) throw new Error(tr('no_backend'));
+    return w[variant];
+  }
+  if (path === '/api/duel') return d.duel[variant];
+  if (path === '/api/verdict') return d.verdict;
+  throw new Error(tr('no_backend'));
+}
+
 async function api(path, body) {
-  const res = await fetch(path, body ? { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) } : undefined);
-  // Un hébergement statique répond en HTML/texte : on le dit clairement plutôt qu'une erreur JSON.
-  const isJson = (res.headers.get('content-type') || '').includes('json');
-  if (!isJson) throw new Error(tr('no_backend'));
+  let res;
+  try {
+    res = await fetch(path, body ? { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) } : undefined);
+  } catch {
+    return recordedApi(path, body);
+  }
+  // Un hébergement statique répond en HTML/texte : on bascule sur le procès enregistré.
+  if (!(res.headers.get('content-type') || '').includes('json')) return recordedApi(path, body);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || res.status);
   return data;
@@ -188,7 +215,7 @@ $('bEnter').addEventListener('click', () => {
   try {
     const c = await api('/api/case?lang=' + lang + (new URLSearchParams(location.search).get('repo') ? '&repo=' + encodeURIComponent(new URLSearchParams(location.search).get('repo')) : ''));
     current.repo = c.repo;
-    $('caseLine').textContent = tr('case_line', { name: c.name, commits: c.commits, span: c.span });
+    $('caseLine').textContent = tr('case_line', { name: c.name, commits: c.commits, span: c.span }) + (current.recorded ? ' · ' + tr('recorded') : '');
     current.list = c.witnesses; $('bDuel').disabled = c.witnesses.length < 2;
     renderFacts(c.facts); renderWitnesses(c.witnesses); $('bEnter').disabled = false;
   } catch (err) {
