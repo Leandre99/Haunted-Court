@@ -34,3 +34,9 @@ Un dépôt git mort est jugé. Les fantômes de ses anciens développeurs témoi
 - WHEN le duel se déroule THEN les deux fantômes SHALL se répondre à tour de rôle, chacun ne pouvant citer que ses propres commits sur ce fichier.
 - IF un fantôme s'attribue le commit de l'autre THEN la phrase SHALL être rejetée et son fantôme SHALL être secoué (glitch).
 - Les fichiers de traduction, de documentation, de métadonnées et les commits de simple changement de version SHALL être écartés.
+
+## R7 — Son et voix
+- WHEN l'utilisateur active le son THEN le système SHALL produire une ambiance (pluie, bourdon, tonnerre) et des effets (marteau, objection, validation, verdict), sans fichier audio externe.
+- WHEN l'utilisateur active la voix THEN chaque fantôme SHALL dire ses phrases avec une voix française de la machine, grave pour le premier témoin et plus aiguë pour celui qui lui répond.
+- Le son et la voix SHALL être désactivés par défaut, et le procès SHALL se dérouler à l'identique sans eux.
+- IF la synthèse vocale est indisponible THEN le bouton de voix SHALL être masqué.

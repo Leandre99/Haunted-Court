@@ -1,32 +1,36 @@
 import { createScene } from '/scene.js';
+import { createAudio } from '/audio.js';
 
 const $ = (id) => document.getElementById(id);
 const sleep = (ms) => new Promise((r) => setTimeout(r, matchMedia('(prefers-reduced-motion: reduce)').matches ? ms / 5 : ms));
 const TINTS = [0x79e0c4, 0xb48cff, 0xffb35c];
 const stage = $('stage');
 let sceneApi = null;
-let current = { repo: null, list: [], busy: false, verified: 0, rejected: 0, witnessed: 0 };
+let current = { repo: null, list: [], voiceIdx: 0, busy: false, verified: 0, rejected: 0, witnessed: 0 };
 
 try { sceneApi = createScene($('gl')); } catch (e) { console.warn(e); }
 if (!sceneApi) $('nogl').hidden = false;
 
-// --- son (désactivé par défaut) ---
-let AC = null, muted = true;
-function tone(f, d, type = 'sine', v = 0.1, slide) {
-  if (muted || !AC) return;
-  const t = AC.currentTime, o = AC.createOscillator(), g = AC.createGain();
-  o.type = type; o.frequency.setValueAtTime(f, t);
-  if (slide) o.frequency.exponentialRampToValueAtTime(slide, t + d);
-  g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.001, t + d);
-  o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + d + 0.05);
-}
-const SND = { ok: () => tone(784, 0.7, 'sine', 0.07), bad: () => tone(110, 0.5, 'sine', 0.12, 60), slam: () => tone(80, 0.7, 'sine', 0.3, 35) };
+// --- son et voix (désactivés par défaut : le navigateur exige un clic) ---
+const audio = createAudio();
 $('bSound').addEventListener('click', () => {
-  muted = !muted;
-  if (!muted && !AC) AC = new (window.AudioContext || window.webkitAudioContext)();
-  $('bSound').setAttribute('aria-pressed', String(!muted));
-  $('bSound').textContent = muted ? 'Son : activer' : 'Son : actif';
+  const on = audio.setSfx(!audio.sfxOn());
+  $('bSound').setAttribute('aria-pressed', String(on));
+  $('bSound').textContent = on ? 'Son : actif' : 'Son : activer';
+  if (on) audio.play('door');
 });
+if (audio.voiceAvailable()) {
+  $('bVoice').addEventListener('click', () => {
+    const on = audio.setVoice(!audio.voiceOn());
+    $('bVoice').setAttribute('aria-pressed', String(on));
+    $('bVoice').textContent = on ? 'Voix : actives' : 'Voix : activer';
+    if (on) audio.speak('Je suis le fantôme de ce dépôt.', VOICES[0], 4000);
+  });
+} else {
+  $('bVoice').hidden = true;
+}
+// Voix par fantôme : grave et lente pour le premier, plus aiguë pour celui qui lui répond.
+const VOICES = [{ pitch: 0.5, rate: 0.8 }, { pitch: 0.95, rate: 0.88 }, { pitch: 0.7, rate: 0.84 }];
 
 async function api(path, body) {
   const res = await fetch(path, body ? { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) } : undefined);
@@ -39,13 +43,13 @@ function flash() { const f = $('flash'); f.classList.remove('go'); void f.offset
 function shake() { stage.classList.remove('shake'); void stage.offsetWidth; stage.classList.add('shake'); }
 async function objection(side) {
   const o = $('obj'); o.hidden = false; o.style.animation = 'none'; void o.offsetWidth; o.style.animation = '';
-  shake(); flash(); SND.slam(); sceneApi?.glitch(side); sceneApi?.gavel();
+  shake(); flash(); audio.play('gavel'); audio.play('bad'); sceneApi?.glitch(side); sceneApi?.gavel();
   await sleep(1100); o.hidden = true;
 }
 
 async function spell(name) {
   const el = $('spelled'); el.textContent = '';
-  for (const ch of name.toUpperCase()) { el.textContent += ch; tone(660, 0.25, 'sine', 0.05); await sleep(110); }
+  for (const ch of name.toUpperCase()) { el.textContent += ch; audio.play('tick'); await sleep(110); }
 }
 
 function renderFacts(facts) {
@@ -81,12 +85,14 @@ async function stamp(s, speaker) {
   const hash = document.createElement('span'); hash.className = 'hash'; hash.textContent = 'git ' + s.hash;
   const spin = document.createElement('span'); spin.className = 'spin';
   row.append(hash, spin); li.append(txt, row); $('say').append(li); li.scrollIntoView({ block: 'nearest' });
-  await sleep(900);
+  // Le fantôme dit sa phrase pendant qu'elle est vérifiée ; sans voix, simple temps de suspense.
+  const voice = VOICES[(s.side ?? current.voiceIdx) % VOICES.length];
+  await Promise.all([sleep(900), audio.speak(s.text, voice)]);
   spin.remove();
   const st = document.createElement('span'); st.className = 'st'; st.textContent = s.ok ? 'vérifié' : 'rejeté';
   const why = document.createElement('span'); why.className = 'why'; why.textContent = s.reason;
   row.append(st, why); li.classList.add(s.ok ? 'ok' : 'bad');
-  if (s.ok) { current.verified++; SND.ok(); } else { current.rejected++; SND.bad(); setTally(); await objection(s.side); }
+  if (s.ok) { current.verified++; audio.play('ok'); } else { current.rejected++; setTally(); await objection(s.side); }
   setTally(); await sleep(350);
 }
 
@@ -100,7 +106,7 @@ async function runDuel() {
   try {
     const d = await api('/api/duel', { repo: current.repo, perjury: $('perjury').checked });
     const idx = (n) => Math.max(0, current.list.findIndex((w) => w.name === n));
-    sceneApi?.summonDuel(TINTS[idx(d.witnesses[0]) % 3], TINTS[idx(d.witnesses[1]) % 3]);
+    sceneApi?.summonDuel(TINTS[idx(d.witnesses[0]) % 3], TINTS[idx(d.witnesses[1]) % 3]); audio.play('whisper');
     const first = (n) => n.split(' ')[0];
     $('gname').textContent = `${first(d.witnesses[0])} contre ${first(d.witnesses[1])}`;
     await sleep(1800);
@@ -130,7 +136,8 @@ async function callWitness(w, tint, btn) {
   document.querySelectorAll('#witnesses .tab').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
   $('say').textContent = ''; $('note').textContent = '';
   $('gname').textContent = w.name; $('gmeta').textContent = 'Invocation en cours…';
-  sceneApi?.shot('witness'); sceneApi?.summon(tint);
+  current.voiceIdx = Math.max(0, current.list.findIndex((x) => x.name === w.name));
+  sceneApi?.shot('witness'); sceneApi?.summon(tint); audio.play('whisper');
   try {
     const [t] = await Promise.all([api('/api/testimony', { repo: current.repo, author: w.name, perjury: $('perjury').checked }), spell(w.name.split(' ')[0])]);
     $('gmeta').textContent = `${t.years} · ${t.commits} commits · ${t.mode === 'llm' ? 'parole générée par IA' : 'parole reconstituée hors-ligne'}`;
@@ -148,7 +155,7 @@ async function callWitness(w, tint, btn) {
 
 $('bVerd').addEventListener('click', async () => {
   if (current.busy) return; current.busy = true; $('bVerd').disabled = true;
-  sceneApi?.shot('judge'); await sleep(900); sceneApi?.gavel(); SND.slam(); flash();
+  sceneApi?.shot('judge'); await sleep(900); sceneApi?.gavel(); audio.play('gavel'); flash();
   try {
     const v = await api('/api/verdict', { repo: current.repo });
     const big = $('vbig'); big.textContent = v.verdict === 'EXECUTER' ? 'EXÉCUTER' : 'DÉBRANCHER';
@@ -156,6 +163,8 @@ $('bVerd').addEventListener('click', async () => {
     $('vscore').textContent = `Défense ${v.defense} points · Accusation ${v.prosecution} points`;
     $('term').textContent = v.lines.map((l) => '> ' + l).join('\n');
     $('verdict').hidden = false;
+    audio.play(v.verdict === 'EXECUTER' ? 'choir' : 'organ');
+    audio.speak(`Verdict : ${v.verdict === 'EXECUTER' ? 'exécuter' : 'débrancher'}.`, { pitch: 0.4, rate: 0.75 });
   } catch (err) {
     $('gmeta').textContent = 'Verdict impossible : ' + err.message;
   } finally { current.busy = false; $('bVerd').disabled = false; }
@@ -165,7 +174,7 @@ $('vClose').addEventListener('click', () => { $('verdict').hidden = true; sceneA
 $('bEnter').addEventListener('click', () => {
   $('title').classList.add('off'); document.body.classList.add('in');
   sceneApi?.shot('intro'); setTimeout(() => sceneApi?.shot('wide'), 2600);
-  if (!muted && AC?.state === 'suspended') AC.resume();
+  audio.play('thunder');
 });
 
 (async () => {

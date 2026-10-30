@@ -23,7 +23,9 @@ Sans dépôt de démonstration, Haunted Court juge son propre dépôt. Pour en j
 3. **Vérification.** `verifyClaim()` contrôle le hash, l'auteur et la citation. Le LLM propose, git tranche.
 4. **Verdict.** EXÉCUTER crée la branche `haunted-court/verdict` (avec `MIGRATION_PLAN.md`) dans un clone ; DÉBRANCHER écrit un rapport. Le dépôt d'origine n'est jamais modifié.
 
-L'option « témoin menteur » est une démonstration : elle ajoute une fausse déclaration pour montrer le vérificateur en action.
+Le son (pluie, tonnerre, marteau) et la voix des fantômes sont synthétisés dans le navigateur et désactivés par défaut : activez-les avec les boutons de gauche.
+
+L’option « témoin menteur » est une démonstration : elle ajoute une fausse déclaration pour montrer le vérificateur en action.
 
 ## Construit avec Kiro
 
