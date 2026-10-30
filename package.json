@@ -1,7 +1,7 @@
 {
   "name": "haunted-court",
   "version": "0.1.0",
-  "description": "Le tribunal du code mort : les fantômes des anciens développeurs témoignent, chaque phrase est vérifiée contre git.",
+  "description": "Dead code on trial: ghosts of a git repo's developers testify, and every sentence is verified against real commits.",
   "type": "module",
   "private": true,
   "engines": { "node": ">=20" },

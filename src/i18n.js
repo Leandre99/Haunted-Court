@@ -1,0 +1,114 @@
+// Textes produits côté serveur. Anglais par défaut ; le français est une option (?lang=fr / bouton FR).
+const D = {
+  en: {
+    // faits
+    f_silent: 'The last commit dates from {year}: more than {n} years of silence.',
+    f_active: 'The repository is still active: last commit in {year}.',
+    f_loved: '{n} commits from {a} to {b}: a project that was loved.',
+    f_todo_many: '{n} TODO/FIXME/HACK markers are still open.',
+    f_todo_few: 'Only {n} TODO/FIXME/HACK marker(s): the code is clean.',
+    f_tests_ok: '{n} test files: the code was defended by tests.',
+    f_tests_few: 'Only {n} test file(s).',
+    f_deps: '{dep} has not changed since {year}: the dependencies are {n} years old.',
+    f_readme: 'A {file} introduces the project to newcomers.',
+    f_noreadme: 'No README: the project does not introduce itself.',
+    none: 'none',
+    // vérification (codes de verifyClaim)
+    r_bad_hash: 'invalid hash',
+    r_missing: 'this commit does not exist',
+    r_other: 'this commit is by {by}',
+    r_no_quote: 'quote not found in the commit',
+    r_quote_ok: 'quote found in the commit',
+    r_ok: 'commit found, author correct',
+    // témoignages
+    v_fix: 'I fixed', v_add: 'I added', v_remove: 'I removed', v_refactor: 'I reworked', v_update: 'I updated', v_write: 'I wrote',
+    w_line: '{verb} this, in {year}: ‹ {subject} ›',
+    w_perjury: 'I\'m the one who did that: ‹ {subject} ›',
+    d_open: 'I shaped this file: ‹ {subject} › ({year})',
+    d_again: 'And in {year}, I came back to it: ‹ {subject} ›',
+    d_retort: 'You forget that I took this file over in {year}: ‹ {subject} ›',
+    d_liar: 'No. I wrote that one: ‹ {subject} ›',
+    llm_lang: 'English',
+    // erreurs
+    err_repo: 'Git repository not found: {repo}',
+    err_empty: 'Empty repository',
+    err_witness: 'Unknown witness: {name}',
+    err_shared: '{a} and {b} never touched the same file.',
+    err_pair: 'No pair of witnesses shares a file.',
+    // verdict
+    rep_title: 'Haunted Court — verdict: {verdict}',
+    EXECUTER: 'EXECUTE', DEBRANCHER: 'UNPLUG',
+    rep_repo: 'Repository on trial: `{name}`',
+    rep_points: 'Defense points: {d} — Prosecution points: {p}',
+    rep_def: 'The defense rests',
+    rep_pro: 'The prosecution\'s case',
+    rep_evidence: 'evidence',
+    rep_plan_exec: '## Plan\nThe repository deserves to live. The branch `haunted-court/verdict` holds this migration plan; the original is not modified.\n\n1. Update the dependencies one by one, running the tests at each step.\n2. Close or handle the TODO/FIXME items listed above.\n3. Add continuous integration.',
+    rep_plan_unplug: '## What is worth saving\nThe repository is unplugged. Archive it, but keep: the existing tests, the commit messages that explain decisions, and the TODO list above.',
+    v_branch: 'branch haunted-court/verdict created',
+    v_commit: 'commit {commit}',
+    v_repo: 'repository: {path}',
+    v_report: 'report: {path}',
+    v_report_only: 'report written: {path}',
+    v_commit_msg: 'docs: migration plan delivered by Haunted Court',
+  },
+  fr: {
+    f_silent: 'Le dernier commit date de {year} : plus de {n} ans de silence.',
+    f_active: 'Le dépôt est encore actif : dernier commit en {year}.',
+    f_loved: '{n} commits de {a} à {b} : un projet qui a été aimé.',
+    f_todo_many: '{n} marqueurs TODO/FIXME/HACK restent ouverts.',
+    f_todo_few: 'Seulement {n} marqueur(s) TODO/FIXME/HACK : le code est propre.',
+    f_tests_ok: '{n} fichiers de tests : le code a été défendu par des tests.',
+    f_tests_few: 'Seulement {n} fichier(s) de test.',
+    f_deps: '{dep} n\'a pas bougé depuis {year} : les dépendances ont {n} ans.',
+    f_readme: 'Un {file} explique le projet aux nouveaux venus.',
+    f_noreadme: 'Aucun README : le projet ne se présente pas.',
+    none: 'aucun',
+    r_bad_hash: 'hash invalide',
+    r_missing: 'ce commit n’existe pas',
+    r_other: 'ce commit est de {by}',
+    r_no_quote: 'citation absente du commit',
+    r_quote_ok: 'extrait trouvé dans le commit',
+    r_ok: 'commit trouvé, auteur correct',
+    v_fix: 'J’ai corrigé', v_add: 'J’ai ajouté', v_remove: 'J’ai supprimé', v_refactor: 'J’ai remanié', v_update: 'J’ai mis à jour', v_write: 'J’ai écrit',
+    w_line: '{verb} ceci, en {year} : ‹ {subject} ›',
+    w_perjury: 'C’est moi qui ai fait ça : ‹ {subject} ›',
+    d_open: 'Ce fichier, c’est moi qui l’ai façonné : ‹ {subject} › ({year})',
+    d_again: 'Et en {year}, j’y suis revenu : ‹ {subject} ›',
+    d_retort: 'Vous oubliez que j’ai repris ce fichier en {year} : ‹ {subject} ›',
+    d_liar: 'Non. Ça, c’est moi qui l’ai écrit : ‹ {subject} ›',
+    llm_lang: 'French',
+    err_repo: 'Dépôt git introuvable : {repo}',
+    err_empty: 'Dépôt vide',
+    err_witness: 'Témoin inconnu : {name}',
+    err_shared: '{a} et {b} n’ont jamais touché le même fichier.',
+    err_pair: 'Aucun couple de témoins ne partage un fichier.',
+    rep_title: 'Haunted Court — verdict : {verdict}',
+    EXECUTER: 'EXÉCUTER', DEBRANCHER: 'DÉBRANCHER',
+    rep_repo: 'Dépôt jugé : `{name}`',
+    rep_points: 'Points de la défense : {d} — Points de l\'accusation : {p}',
+    rep_def: 'Plaidoirie de la défense',
+    rep_pro: 'Réquisitoire de l\'accusation',
+    rep_evidence: 'preuve',
+    rep_plan_exec: '## Plan\nLe dépôt mérite de vivre. Une branche `haunted-court/verdict` contient ce plan de migration ; l\'original n\'est pas modifié.\n\n1. Mettre à jour les dépendances, une par une, tests à chaque étape.\n2. Fermer ou traiter les TODO/FIXME listés ci-dessus.\n3. Ajouter une intégration continue.',
+    rep_plan_unplug: '## Ce qui mérite d\'être sauvé\nLe dépôt est débranché. Archivez-le, mais conservez : les tests existants, les messages de commit qui expliquent des décisions, et la liste des TODO ci-dessus.',
+    v_branch: 'branche haunted-court/verdict créée',
+    v_commit: 'commit {commit}',
+    v_repo: 'dépôt : {path}',
+    v_report: 'rapport : {path}',
+    v_report_only: 'rapport écrit : {path}',
+    v_commit_msg: 'docs: plan de migration rendu par Haunted Court',
+  },
+};
+
+export const normLang = (l) => (l === 'fr' ? 'fr' : 'en');
+
+export function t(lang, key, vars = {}) {
+  const s = (D[normLang(lang)][key] ?? D.en[key] ?? key);
+  return s.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? ''));
+}
+
+/** Traduit le résultat de verifyClaim. */
+export function reason(lang, v) {
+  return t(lang, v.code, { by: v.by });
+}

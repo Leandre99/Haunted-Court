@@ -1,36 +1,43 @@
 # Haunted Court
 
-Le procès du code mort. Un dépôt git abandonné est jugé : les fantômes de ses anciens développeurs témoignent, et **chaque phrase est vérifiée contre le vrai historique git**. Un témoin qui s'attribue le commit d'un autre, cite un hash inexistant ou invente une citation est rejeté sur-le-champ. Le juge rend ensuite un verdict qui produit un vrai artefact.
+**Dead code on trial.** Point it at an abandoned git repository: the ghosts of its former developers are summoned to a gothic 3D courtroom to testify, or to duel over the same file. **Every sentence a ghost speaks must cite a commit, and is checked against the real git history.** A ghost that claims someone else's commit, cites a hash that does not exist or invents a quote is struck down on the spot with an objection. The judge then weighs the facts and delivers a verdict that produces a real artifact. Your repository is never modified.
 
-Projet pour Kiroween 2026 (catégorie Frankenstein : Git + IA + théâtre judiciaire en 3D + action réelle sur le code).
+Built for Kiroween 2026 — category: **Frankenstein** (git history + an LLM persona + a 3D courtroom + a real action on code).
 
-## Lancer
+> Français : l'interface est en anglais par défaut ; ajoutez `?lang=fr` à l'adresse ou cliquez sur le bouton **FR** pour passer en français.
 
-Prérequis : Node 20+ et git. Aucune installation npm.
+## Run it
+
+Requirements: Node 20+ and git. No npm install needed.
 
 ```bash
-git clone https://github.com/bread-and-pepper/django-userena demo/django-userena   # dépôt de démonstration
+git clone https://github.com/bread-and-pepper/django-userena demo/django-userena   # demo repository to put on trial
 npm start        # http://127.0.0.1:3000
-npm test         # tests du vérificateur
+npm test         # tests for the verifier and the duel
 ```
 
-Sans dépôt de démonstration, Haunted Court juge son propre dépôt. Pour en juger un autre : `http://127.0.0.1:3000/?repo=/chemin/vers/depot`.
+Without the demo repository, Haunted Court judges its own repository. To judge another one: `http://127.0.0.1:3000/?repo=/path/to/repo`.
 
-## Comment ça marche
+Optional: set `ANTHROPIC_API_KEY` and the ghosts' statements are written by an LLM from their real commits (the verifier still decides what is accepted). Without a key, statements are rebuilt offline from the real commit messages.
 
-1. **Faits.** Âge du dernier commit, TODO/FIXME, tests, ancienneté des dépendances, README : chaque fait pèse pour la défense ou l'accusation.
-2. **Témoins.** Les trois principaux auteurs. Avec `ANTHROPIC_API_KEY`, un LLM écrit leurs déclarations à partir de leurs vrais commits ; sans clé, elles sont reconstituées hors-ligne.
-3. **Vérification.** `verifyClaim()` contrôle le hash, l'auteur et la citation. Le LLM propose, git tranche.
-4. **Verdict.** EXÉCUTER crée la branche `haunted-court/verdict` (avec `MIGRATION_PLAN.md`) dans un clone ; DÉBRANCHER écrit un rapport. Le dépôt d'origine n'est jamais modifié.
+## How it works
 
-Le son (pluie, tonnerre, marteau) et la voix des fantômes sont synthétisés dans le navigateur et désactivés par défaut : activez-les avec les boutons de gauche.
+1. **Facts.** Age of the last commit, TODO/FIXME markers, tests, age of the dependency files, README. Each fact weighs for the defense or the prosecution.
+2. **Witnesses.** The three main authors. The LLM proposes, **git decides**.
+3. **Verification.** `verifyClaim()` checks that the hash exists, that the commit belongs to the witness, and that the quote appears in the commit message or diff. Hashes are validated before they ever reach git.
+4. **Duel.** The engine finds the pair of witnesses and the code file they both touched most; they answer each other, each limited to their own commits.
+5. **Verdict.** EXECUTE creates the branch `haunted-court/verdict` (with a `MIGRATION_PLAN.md`) in a clone of the repository; UNPLUG writes a report on what is worth saving. The original repository is never touched.
 
-L’option « témoin menteur » est une démonstration : elle ajoute une fausse déclaration pour montrer le vérificateur en action.
+The sound (rain, thunder, gavel) and the ghosts' voices are synthesized in the browser (Web Audio and Speech Synthesis) and are off by default: use the buttons on the left. The **Lying witness** option is a demo: it adds one false statement so you can watch the verifier work.
 
-## Construit avec Kiro
+## Built with Kiro
 
-Specs (`.kiro/specs/`), steering (`.kiro/steering/`) et hook (`.kiro/hooks/`) décrivent le projet.
+Specs (`.kiro/specs/`), steering docs (`.kiro/steering/`) and a hook (`.kiro/hooks/`) describe the project.
 
-## Licence
+## Third-party material
+
+The demonstration repository (django-userena, BSD licensed) is third-party code cloned at runtime into `demo/` and is not part of this repository. three.js is loaded from a CDN.
+
+## License
 
 MIT

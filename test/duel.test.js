@@ -47,9 +47,10 @@ test('le parjure d’un fantôme dans le duel est attrapé', async () => {
   assert.equal(bad.length, 1);
   assert.equal(bad[0].side, 1);
   assert.match(bad[0].reason, /Odile/);
+  assert.equal(bad[0].code, 'r_other');
 });
 
 test('deux auteurs sans fichier commun : erreur claire', async () => {
   const dir = makeRepo();
-  await assert.rejects(() => duel(dir, 'Odile', 'Inconnu'), /même fichier/);
+  await assert.rejects(() => duel(dir, 'Odile', 'Inconnu'), /same file/);
 });

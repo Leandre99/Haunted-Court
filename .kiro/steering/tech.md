@@ -1,8 +1,9 @@
-# Technique
+# Tech
 
-- Node 20+, modules ES, **aucune dépendance npm** côté serveur.
-- Front : HTML/CSS/JS natif, three.js 0.160 via import map (CDN jsDelivr).
-- Git est appelé uniquement via `execFile` (jamais `exec`, jamais de shell).
-- Toute entrée utilisée dans une commande git est validée (hash hexadécimal).
-- Tests : `npm test` (node:test). Toute modification de `verifyClaim` exige un test.
-- Le LLM est optionnel (`ANTHROPIC_API_KEY`) et ne doit jamais être indispensable à la démo.
+- Node 20+, ES modules, **no npm dependency** on the server.
+- Front end: native HTML/CSS/JS, three.js 0.160 through an import map (jsDelivr CDN).
+- Git is only called through `execFile` (never `exec`, never a shell).
+- Any input used in a git command is validated (hexadecimal hash).
+- Tests: `npm test` (node:test). Any change to `verifyClaim` requires a test.
+- The LLM is optional (`ANTHROPIC_API_KEY`) and must never be required for the demo.
+- Server texts go through `src/i18n.js`; UI texts through `public/i18n.js`. Never hard-code a user-facing sentence.

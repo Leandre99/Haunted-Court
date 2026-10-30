@@ -4,10 +4,11 @@ import { existsSync } from 'node:fs';
 import { join, extname, resolve, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assertRepo, allCommits, groupByAuthor } from './git.js';
-import { gatherFacts, judge } from './facts.js';
+import { gatherFacts, judge, localizeFacts } from './facts.js';
 import { summon } from './witness.js';
 import { render } from './verdict.js';
 import { duel, bestPair } from './duel.js';
+import { t, normLang } from './i18n.js';
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const PUBLIC = join(ROOT, 'public');
@@ -17,11 +18,11 @@ const DEFAULT_REPO = existsSync(join(ROOT, 'demo', 'django-userena', '.git')) ? 
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json' };
 
 const cache = new Map();
-async function load(repo) {
-  assertRepo(repo);
+async function load(repo, lang) {
+  assertRepo(repo, lang);
   if (!cache.has(repo)) {
     const commits = await allCommits(repo);
-    if (!commits.length) throw new Error('Dépôt vide');
+    if (!commits.length) throw new Error(t(lang, 'err_empty'));
     const { facts, todos, testFiles } = await gatherFacts(repo, commits);
     cache.set(repo, { commits, authors: groupByAuthor(commits), facts, todos, testFiles });
   }
@@ -44,17 +45,18 @@ async function readJson(req) {
   let s = '';
   for await (const chunk of req) {
     s += chunk;
-    if (s.length > 1e5) throw new Error('corps trop gros');
+    if (s.length > 1e5) throw new Error('request body too large');
   }
   return s ? JSON.parse(s) : {};
 }
 
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://localhost');
+  let lang = normLang(url.searchParams.get('lang'));
   try {
     if (url.pathname === '/api/case' && req.method === 'GET') {
       const repo = resolve(url.searchParams.get('repo') || DEFAULT_REPO);
-      const c = await load(repo);
+      const c = await load(repo, lang);
       const first = c.commits[c.commits.length - 1].date.slice(0, 4);
       const last = c.commits[0].date.slice(0, 4);
       return send(res, 200, {
@@ -62,41 +64,45 @@ const server = http.createServer(async (req, res) => {
         name: repo.split(/[\\/]/).pop(),
         commits: c.commits.length,
         span: `${first}-${last}`,
-        facts: c.facts,
+        facts: localizeFacts(c.facts, lang),
         witnesses: dedupe(c.authors).slice(0, 3).map(({ name, count, first, last }) => ({ name, count, years: `${first.slice(0, 4)}-${last.slice(0, 4)}` })),
         llm: Boolean(process.env.ANTHROPIC_API_KEY),
       });
     }
     if (url.pathname === '/api/testimony' && req.method === 'POST') {
-      const { repo = DEFAULT_REPO, author, perjury } = await readJson(req);
-      const c = await load(resolve(repo));
-      return send(res, 200, await summon(resolve(repo), author, c.commits, { perjury: Boolean(perjury) }));
+      const body = await readJson(req);
+      lang = normLang(body.lang);
+      const repo = resolve(body.repo || DEFAULT_REPO);
+      const c = await load(repo, lang);
+      return send(res, 200, await summon(repo, body.author, c.commits, { perjury: Boolean(body.perjury), lang }));
     }
     if (url.pathname === '/api/duel' && req.method === 'POST') {
-      const { repo = DEFAULT_REPO, perjury, a: wantA, b: wantB } = await readJson(req);
-      let a = wantA, b = wantB;
-      const r = resolve(repo);
-      const c = await load(r);
+      const body = await readJson(req);
+      lang = normLang(body.lang);
+      const r = resolve(body.repo || DEFAULT_REPO);
+      const c = await load(r, lang);
+      let { a, b } = body;
       if (!a || !b) {
         const pair = await bestPair(r, dedupe(c.authors).slice(0, 3).map((x) => x.name));
-        if (!pair) throw new Error('Aucun couple de témoins ne partage un fichier.');
+        if (!pair) throw new Error(t(lang, 'err_pair'));
         ({ a, b } = pair);
       }
-      return send(res, 200, await duel(r, a, b, { perjury: Boolean(perjury) }));
+      return send(res, 200, await duel(r, a, b, { perjury: Boolean(body.perjury), lang }));
     }
     if (url.pathname === '/api/verdict' && req.method === 'POST') {
-      const { repo = DEFAULT_REPO } = await readJson(req);
-      const r = resolve(repo);
-      const c = await load(r);
+      const body = await readJson(req);
+      lang = normLang(body.lang);
+      const r = resolve(body.repo || DEFAULT_REPO);
+      const c = await load(r, lang);
       const tally = judge(c.facts);
-      return send(res, 200, { ...tally, ...(await render(r, c.facts, tally)) });
+      return send(res, 200, { ...tally, ...(await render(r, localizeFacts(c.facts, lang), tally, lang)) });
     }
-    if (url.pathname.startsWith('/api/')) return send(res, 404, { error: 'inconnu' });
+    if (url.pathname.startsWith('/api/')) return send(res, 404, { error: 'not found' });
 
     // fichiers statiques
     const rel = normalize(url.pathname === '/' ? '/index.html' : url.pathname).replace(/^([/\\])+/, '');
     const file = join(PUBLIC, rel);
-    if (!file.startsWith(PUBLIC) || !existsSync(file)) return send(res, 404, 'introuvable', 'text/plain');
+    if (!file.startsWith(PUBLIC) || !existsSync(file)) return send(res, 404, 'not found', 'text/plain');
     return send(res, 200, await readFile(file), MIME[extname(file)] || 'application/octet-stream');
   } catch (err) {
     console.error(err);
@@ -105,5 +111,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, '127.0.0.1', () => {
-  console.log(`Haunted Court : http://127.0.0.1:${PORT}  (dépôt par défaut : ${DEFAULT_REPO})`);
+  console.log(`Haunted Court: http://127.0.0.1:${PORT}  (default repository: ${DEFAULT_REPO})`);
 });

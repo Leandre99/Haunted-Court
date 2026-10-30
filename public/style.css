@@ -95,3 +95,7 @@ ol.say{list-style:none;margin:0;padding:0;display:grid;gap:9px}
 .tab.duel:hover:not(:disabled){border-color:var(--blood);color:var(--bone);background:rgba(201,48,58,.2)}
 .s .lab{margin-bottom:2px}
 @media (max-width:700px){.hud.left .duel{grid-column:1/-1}}
+.langbtn{position:absolute;z-index:10;right:max(14px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));padding:6px 10px;background:rgba(10,7,16,.78);border:1px solid #4a3560;font:12px var(--mono);letter-spacing:.12em;color:var(--dim);cursor:pointer}
+.langbtn:hover{border-color:var(--spectral);color:var(--spectral)}
+body.in .langbtn{bottom:auto;top:calc(46vh + 24px)}
+@media (max-width:1000px){body.in .langbtn{top:auto;bottom:max(86px,env(safe-area-inset-bottom))}}

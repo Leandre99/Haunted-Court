@@ -2,6 +2,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { t } from './i18n.js';
 
 const run = promisify(execFile);
 const HASH = /^[0-9a-f]{4,40}$/i;
@@ -16,9 +17,9 @@ export async function git(repo, args, { allowFail = false } = {}) {
   }
 }
 
-export function assertRepo(repo) {
+export function assertRepo(repo, lang) {
   if (typeof repo !== 'string' || !repo || !existsSync(join(repo, '.git'))) {
-    throw new Error('Dépôt git introuvable : ' + repo);
+    throw new Error(t(lang, 'err_repo', { repo }));
   }
 }
 
@@ -65,26 +66,20 @@ export async function filesOfCommit(repo, hash) {
  * Vérifie une affirmation d'un fantôme contre le dépôt.
  * Une phrase est valide si le hash existe, appartient bien au témoin,
  * et si la citation (si fournie) figure dans le message ou le diff.
+ * Retourne un code (r_*) traduisible par i18n.reason().
  */
 export async function verifyClaim(repo, { hash, quote, author }) {
-  if (!hash || !HASH.test(hash)) return { ok: false, reason: 'hash invalide' };
+  if (!hash || !HASH.test(hash)) return { ok: false, code: 'r_bad_hash' };
   const full = (await git(repo, ['rev-parse', '--verify', '--quiet', `${hash}^{commit}`], { allowFail: true })).trim();
-  if (!full) return { ok: false, reason: 'ce commit n’existe pas' };
+  if (!full) return { ok: false, code: 'r_missing' };
   const meta = (await git(repo, ['show', '-s', `--format=%an${SEP}%B`, full])).split(SEP);
   const realAuthor = meta[0];
-  if (author && realAuthor !== author) {
-    return { ok: false, reason: `ce commit est de ${realAuthor}`, full };
-  }
+  if (author && realAuthor !== author) return { ok: false, code: 'r_other', by: realAuthor, full };
   if (quote && quote.trim()) {
     const q = quote.trim().toLowerCase();
-    const msg = (meta[1] ?? '').toLowerCase();
-    let found = msg.includes(q);
-    if (!found) {
-      const patch = await git(repo, ['show', '--format=', full]);
-      found = patch.toLowerCase().includes(q);
-    }
-    if (!found) return { ok: false, reason: 'citation absente du commit', full };
-    return { ok: true, reason: 'extrait trouvé dans le commit', full };
+    let found = (meta[1] ?? '').toLowerCase().includes(q);
+    if (!found) found = (await git(repo, ['show', '--format=', full])).toLowerCase().includes(q);
+    return found ? { ok: true, code: 'r_quote_ok', full } : { ok: false, code: 'r_no_quote', full };
   }
-  return { ok: true, reason: 'commit trouvé, auteur correct', full };
+  return { ok: true, code: 'r_ok', full };
 }

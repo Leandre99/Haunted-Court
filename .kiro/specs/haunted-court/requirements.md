@@ -1,42 +1,46 @@
 # Requirements — Haunted Court
 
-Un dépôt git mort est jugé. Les fantômes de ses anciens développeurs témoignent. Chaque phrase d'un fantôme est vérifiée contre le vrai historique git. Le juge rend un verdict qui produit un vrai artefact.
+A dead git repository is put on trial. The ghosts of its former developers testify. Every sentence a ghost speaks is checked against the real git history. The judge delivers a verdict that produces a real artifact.
 
-## R1 — Ouvrir une affaire
-**Story.** En tant que développeur qui hérite d'un dépôt, je veux ouvrir le dossier d'un dépôt local pour voir les faits qui le concernent.
-- WHEN un chemin de dépôt valide est fourni THEN le système SHALL retourner le nombre de commits, la période, les faits de la défense et de l'accusation, et les trois principaux auteurs.
-- WHEN le chemin n'est pas un dépôt git THEN le système SHALL répondre par une erreur lisible et ne rien exécuter.
-- WHEN deux auteurs ne diffèrent que par des accents THEN le système SHALL ne convoquer qu'un seul fantôme.
+## R1 — Open a case
+**Story.** As a developer inheriting a repository, I want to open the case file of a local repository to see the facts about it.
+- WHEN a valid repository path is given THEN the system SHALL return the commit count, the time span, the facts for the defense and the prosecution, and the three main authors.
+- WHEN the path is not a git repository THEN the system SHALL answer with a readable error and execute nothing.
+- WHEN two authors differ only by accents THEN the system SHALL summon a single ghost.
 
-## R2 — Convoquer un témoin
-- WHEN un témoin est convoqué THEN le système SHALL produire des déclarations à la première personne, chacune appuyée sur un commit de ce témoin.
-- WHEN la clé `ANTHROPIC_API_KEY` est présente THEN le système SHALL générer les déclarations avec un LLM ; sinon il SHALL les reconstituer hors-ligne à partir des vrais messages de commit.
-- IF l'appel LLM échoue THEN le système SHALL se replier sur le mode hors-ligne sans interrompre le procès.
+## R2 — Summon a witness
+- WHEN a witness is summoned THEN the system SHALL produce first-person statements, each resting on one of that witness's commits.
+- WHEN `ANTHROPIC_API_KEY` is set THEN the system SHALL generate the statements with an LLM; otherwise it SHALL rebuild them offline from the real commit messages.
+- IF the LLM call fails THEN the system SHALL fall back to offline mode without interrupting the trial.
 
-## R3 — Traçabilité (zéro hallucination)
-- WHEN une déclaration cite un hash THEN le système SHALL vérifier : le hash existe, le commit appartient bien au témoin, et la citation figure dans le message ou le diff.
-- IF une de ces vérifications échoue THEN la déclaration SHALL être marquée « rejetée » avec la raison, et l'interface SHALL déclencher une objection.
-- WHEN un hash n'a pas la forme hexadécimale attendue THEN le système SHALL le rejeter sans l'envoyer à git.
+## R3 — Traceability (zero hallucination)
+- WHEN a statement cites a hash THEN the system SHALL verify that the hash exists, that the commit belongs to the witness, and that the quote appears in the message or the diff.
+- IF any check fails THEN the statement SHALL be marked "rejected" with the reason, and the interface SHALL raise an objection.
+- WHEN a hash is not of the expected hexadecimal form THEN the system SHALL reject it without sending it to git.
 
-## R4 — Verdict exécutable
-- WHEN le verdict est demandé THEN le système SHALL comparer les points de la défense et de l'accusation et rendre EXÉCUTER ou DÉBRANCHER.
-- IF le verdict est EXÉCUTER THEN le système SHALL créer, dans un clone, la branche `haunted-court/verdict` avec un commit `MIGRATION_PLAN.md`.
-- IF le verdict est DÉBRANCHER THEN le système SHALL écrire un rapport de ce qui mérite d'être sauvé.
-- Le dépôt d'origine SHALL ne jamais être modifié.
+## R4 — Executable verdict
+- WHEN the verdict is requested THEN the system SHALL compare the defense and prosecution points and return EXECUTE or UNPLUG.
+- IF the verdict is EXECUTE THEN the system SHALL create, in a clone, the branch `haunted-court/verdict` with a `MIGRATION_PLAN.md` commit.
+- IF the verdict is UNPLUG THEN the system SHALL write a report of what is worth saving.
+- The original repository SHALL never be modified.
 
-## R5 — La salle
-- WHEN un témoin est convoqué THEN la salle 3D SHALL le faire apparaître, la caméra SHALL se rapprocher, et chaque rejet SHALL produire une objection (secousse, flash, marteau).
-- WHEN `prefers-reduced-motion` est actif THEN les animations SHALL être raccourcies.
-- IF WebGL est indisponible THEN le procès SHALL rester utilisable sans la 3D.
+## R5 — The courtroom
+- WHEN a witness is summoned THEN the 3D courtroom SHALL make them appear, the camera SHALL move closer, and every rejection SHALL raise an objection (shake, flash, gavel).
+- WHEN `prefers-reduced-motion` is set THEN animations SHALL be shortened.
+- IF WebGL is unavailable THEN the trial SHALL remain usable without 3D.
 
-## R6 — Le duel
-- WHEN un duel est demandé THEN le système SHALL choisir, parmi les trois principaux témoins, le couple et le fichier de code qu'ils ont le plus touchés tous les deux.
-- WHEN le duel se déroule THEN les deux fantômes SHALL se répondre à tour de rôle, chacun ne pouvant citer que ses propres commits sur ce fichier.
-- IF un fantôme s'attribue le commit de l'autre THEN la phrase SHALL être rejetée et son fantôme SHALL être secoué (glitch).
-- Les fichiers de traduction, de documentation, de métadonnées et les commits de simple changement de version SHALL être écartés.
+## R6 — The duel
+- WHEN a duel is requested THEN the system SHALL pick, among the three main witnesses, the pair and the code file they both touched most.
+- WHEN the duel runs THEN the two ghosts SHALL answer each other in turn, each limited to their own commits on that file.
+- IF a ghost claims the other's commit THEN the statement SHALL be rejected and that ghost SHALL glitch.
+- Translation files, documentation, metadata and trivial version-bump commits SHALL be ignored.
 
-## R7 — Son et voix
-- WHEN l'utilisateur active le son THEN le système SHALL produire une ambiance (pluie, bourdon, tonnerre) et des effets (marteau, objection, validation, verdict), sans fichier audio externe.
-- WHEN l'utilisateur active la voix THEN chaque fantôme SHALL dire ses phrases avec une voix française de la machine, grave pour le premier témoin et plus aiguë pour celui qui lui répond.
-- Le son et la voix SHALL être désactivés par défaut, et le procès SHALL se dérouler à l'identique sans eux.
-- IF la synthèse vocale est indisponible THEN le bouton de voix SHALL être masqué.
+## R7 — Sound and voice
+- WHEN the user turns sound on THEN the system SHALL produce an ambience (rain, drone, thunder) and effects (gavel, objection, validation, verdict), with no external audio file.
+- WHEN the user turns voice on THEN each ghost SHALL speak its statements with a voice installed on the machine, deep for the first witness and higher for the one answering.
+- Sound and voice SHALL be off by default and the trial SHALL run identically without them.
+- IF speech synthesis is unavailable THEN the voice button SHALL be hidden.
+
+## R8 — Languages
+- The interface and the server's texts SHALL be in English by default and available in French (`?lang=fr` or the language button).
+- Verification results SHALL be language-neutral codes, translated at the edge.

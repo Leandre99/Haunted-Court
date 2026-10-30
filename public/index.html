@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Haunted Court</title>
+<meta name="description" content="Dead code on trial: ghosts of a git repo's developers testify, and every sentence is verified against real commits.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&family=IM+Fell+English:ital@0;1&family=Courier+Prime:wght@400;700&display=swap">
 <link rel="stylesheet" href="/style.css">
@@ -12,55 +13,57 @@
 <body>
 <main class="stage" id="stage">
   <canvas id="gl"></canvas>
-  <div class="nogl" id="nogl" hidden>La 3D n'est pas disponible sur cet appareil. Le procès reste utilisable.</div>
+  <div class="nogl" id="nogl" data-i18n="nogl" hidden></div>
   <div class="flash" id="flash"></div>
 
   <section class="title" id="title">
-    <p class="kicker">Le procès du code mort</p>
+    <p class="kicker" data-i18n="kicker"></p>
     <h1>Haunted Court</h1>
-    <p class="case" id="caseLine">Ouverture du dossier…</p>
-    <button class="btn main" id="bEnter" disabled>Entrer dans la salle</button>
+    <p class="case" id="caseLine" data-i18n="opening"></p>
+    <button class="btn main" id="bEnter" data-i18n="enter" disabled></button>
   </section>
+
+  <button class="langbtn" id="bLang" data-i18n="lang_btn" data-i18n-title="lang_title"></button>
 
   <div class="spelled" id="spelled" aria-live="polite"></div>
 
-  <aside class="hud left" aria-label="Témoins">
-    <div class="lab">Convoquer un témoin</div>
+  <aside class="hud left" aria-label="Witnesses">
+    <div class="lab" data-i18n="summon"></div>
     <div id="witnesses" class="stack"></div>
-    <button class="tab duel" id="bDuel" disabled>Duel des fantômes<small>le fichier qu’ils se disputent</small></button>
-    <label class="check"><input type="checkbox" id="perjury"> Témoin menteur <small>(démo)</small></label>
-    <button class="tab" id="bSound" aria-pressed="false">Son : activer</button>
-    <button class="tab" id="bVoice" aria-pressed="false">Voix : activer</button>
+    <button class="tab duel" id="bDuel" disabled><span data-i18n="duel"></span><small data-i18n="duel_sub"></small></button>
+    <label class="check"><input type="checkbox" id="perjury"> <span data-i18n="perjury"></span> <small data-i18n="demo"></small></label>
+    <button class="tab" id="bSound" aria-pressed="false" data-i18n="sound_off"></button>
+    <button class="tab" id="bVoice" aria-pressed="false" data-i18n="voice_off"></button>
   </aside>
 
-  <aside class="hud right" aria-label="Dossier">
-    <div class="lab">Pièces du dossier</div>
+  <aside class="hud right" aria-label="Case file">
+    <div class="lab" data-i18n="dossier"></div>
     <div id="facts"></div>
   </aside>
 
   <section class="hud bottom">
     <div class="testi" aria-live="polite">
-      <div class="who"><span class="gname" id="gname">Salle d'audience ouverte</span><span class="gmeta" id="gmeta">Convoquez un témoin à gauche.</span></div>
+      <div class="who"><span class="gname" id="gname" data-i18n="court_open"></span><span class="gmeta" id="gmeta" data-i18n="summon_hint"></span></div>
       <ol class="say" id="say"></ol>
       <div class="note" id="note"></div>
     </div>
     <div class="ctl">
       <div class="tally">
-        <div>Vérifiées<strong id="nv">0</strong></div>
-        <div>Rejetées<strong id="nr">0</strong></div>
+        <div><span data-i18n="verified"></span><strong id="nv">0</strong></div>
+        <div><span data-i18n="rejected"></span><strong id="nr">0</strong></div>
       </div>
-      <button class="btn verd" id="bVerd" disabled>Rendre le verdict</button>
+      <button class="btn verd" id="bVerd" data-i18n="verdict_btn" disabled></button>
     </div>
   </section>
 
-  <div class="obj" id="obj" hidden>OBJECTION !</div>
+  <div class="obj" id="obj" data-i18n="objection" hidden></div>
 
   <section class="verdict" id="verdict" hidden>
     <div class="vbox">
       <div class="big" id="vbig"></div>
       <div class="score" id="vscore"></div>
       <pre class="term" id="term"></pre>
-      <button class="btn main" id="vClose">Retour à la salle</button>
+      <button class="btn main" id="vClose" data-i18n="back"></button>
     </div>
   </section>
 </main>
