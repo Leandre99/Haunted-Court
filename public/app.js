@@ -38,6 +38,9 @@ const VOICES = [{ pitch: 0.5, rate: 0.8 }, { pitch: 0.95, rate: 0.88 }, { pitch:
 
 async function api(path, body) {
   const res = await fetch(path, body ? { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) } : undefined);
+  // Un hébergement statique répond en HTML/texte : on le dit clairement plutôt qu'une erreur JSON.
+  const isJson = (res.headers.get('content-type') || '').includes('json');
+  if (!isJson) throw new Error(tr('no_backend'));
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || res.status);
   return data;
