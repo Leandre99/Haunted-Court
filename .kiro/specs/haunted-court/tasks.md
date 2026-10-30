@@ -12,5 +12,5 @@
 - [x] 10. Ghost voices and synthesized sound ambience (R7)
 - [x] 11. English by default, French option (R8)
 - [ ] 12. Property-based tests for `verifyClaim`
-- [ ] 13. Public deployment with a demonstration repository
+- [ ] 13. Public deployment (Dockerfile ready, hosting to be done)
 - [ ] 14. Demo video and Devpost page

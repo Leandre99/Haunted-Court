@@ -30,6 +30,13 @@ Optional: set `ANTHROPIC_API_KEY` and the ghosts' statements are written by an L
 
 The sound (rain, thunder, gavel) and the ghosts' voices are synthesized in the browser (Web Audio and Speech Synthesis) and are off by default: use the buttons on the left. The **Lying witness** option is a demo: it adds one false statement so you can watch the verifier work.
 
+## Deploy
+
+A real server is needed (Node + git): static hosts such as Vercel only serve files.
+
+- **Docker** (Render, Railway, Fly.io…): the  installs git, clones the demonstration repository at build time and starts in **public mode** (: it only ever judges the demo repository, never an arbitrary path).  is ready for Render.
+- **Static hosts**: the page falls back to a **recorded trial** (, produced by  from a real run) so it never shows an error. Verification results in that file were computed against git when recorded.
+
 ## Built with Kiro
 
 Specs (`.kiro/specs/`), steering docs (`.kiro/steering/`) and a hook (`.kiro/hooks/`) describe the project.
