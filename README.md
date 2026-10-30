@@ -34,8 +34,8 @@ The sound (rain, thunder, gavel) and the ghosts' voices are synthesized in the b
 
 A real server is needed (Node + git): static hosts such as Vercel only serve files.
 
-- **Docker** (Render, Railway, Fly.io…): the  installs git, clones the demonstration repository at build time and starts in **public mode** (: it only ever judges the demo repository, never an arbitrary path).  is ready for Render.
-- **Static hosts**: the page falls back to a **recorded trial** (, produced by  from a real run) so it never shows an error. Verification results in that file were computed against git when recorded.
+- **Docker** (Render, Railway, Fly.io…): the `Dockerfile` installs git, clones the demonstration repository at build time and starts in **public mode** (`HC_PUBLIC=1`: it only ever judges the demo repository, never an arbitrary path). `render.yaml` is ready for Render.
+- **Static hosts**: the page falls back to a **recorded trial** (`public/demo-data.json`, produced by `npm run record` from a real run) so it never shows an error. Verification results in that file were computed against git when recorded.
 
 ## Built with Kiro
 
