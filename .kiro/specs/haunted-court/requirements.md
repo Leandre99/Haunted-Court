@@ -28,3 +28,9 @@ Un dépôt git mort est jugé. Les fantômes de ses anciens développeurs témoi
 - WHEN un témoin est convoqué THEN la salle 3D SHALL le faire apparaître, la caméra SHALL se rapprocher, et chaque rejet SHALL produire une objection (secousse, flash, marteau).
 - WHEN `prefers-reduced-motion` est actif THEN les animations SHALL être raccourcies.
 - IF WebGL est indisponible THEN le procès SHALL rester utilisable sans la 3D.
+
+## R6 — Le duel
+- WHEN un duel est demandé THEN le système SHALL choisir, parmi les trois principaux témoins, le couple et le fichier de code qu'ils ont le plus touchés tous les deux.
+- WHEN le duel se déroule THEN les deux fantômes SHALL se répondre à tour de rôle, chacun ne pouvant citer que ses propres commits sur ce fichier.
+- IF un fantôme s'attribue le commit de l'autre THEN la phrase SHALL être rejetée et son fantôme SHALL être secoué (glitch).
+- Les fichiers de traduction, de documentation, de métadonnées et les commits de simple changement de version SHALL être écartés.
