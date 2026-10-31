@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&family=IM+Fell+English:ital@0;1&family=Courier+Prime:wght@400;700&display=swap">
 <link rel="stylesheet" href="/style.css">
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 </head>
 <body>
 <main class="stage" id="stage">
@@ -20,11 +20,12 @@
     <p class="kicker" data-i18n="kicker"></p>
     <h1>Haunted Court</h1>
     <p class="case" id="caseLine" data-i18n="opening"></p>
-    <button class="btn main" id="bEnter" data-i18n="enter" disabled></button>
+    <div class="row"><button class="btn main" id="bEnter" data-i18n="enter" disabled></button><button class="btn verd" id="bTrial" data-i18n="trial" disabled></button></div>
   </section>
 
   <button class="langbtn" id="bLang" data-i18n="lang_btn" data-i18n-title="lang_title"></button>
 
+  <div class="phase" id="phase" data-i18n="ph_open"></div>
   <div class="spelled" id="spelled" aria-live="polite"></div>
 
   <aside class="hud left" aria-label="Witnesses">
@@ -51,8 +52,9 @@
       <div class="tally">
         <div><span data-i18n="verified"></span><strong id="nv">0</strong></div>
         <div><span data-i18n="rejected"></span><strong id="nr">0</strong></div>
+        <div><span data-i18n="objections"></span><strong id="no">0</strong></div>
       </div>
-      <button class="btn verd" id="bVerd" data-i18n="verdict_btn" disabled></button>
+      <div class="btns"><button class="btn" id="bObj" data-i18n="objection_btn"></button><button class="btn verd" id="bVerd" data-i18n="verdict_btn" disabled></button><button class="btn" id="bCine" data-i18n="cinema_on"></button></div>
     </div>
   </section>
 

@@ -1,4 +1,4 @@
-import { filesOfCommit, verifyClaim } from './git.js';
+import { filesOfCommit, verifyClaim, proofOf } from './git.js';
 import { t, reason, normLang } from './i18n.js';
 
 const MODEL = process.env.HAUNTED_MODEL || 'claude-sonnet-5-5';
@@ -89,7 +89,7 @@ export async function summon(repo, author, allCommits, { perjury = false, lang =
   const verified = [];
   for (const s of statements) {
     const v = await verifyClaim(repo, { hash: s.hash, quote: s.quote, author });
-    verified.push({ text: s.text, hash: s.hash, quote: s.quote, ok: v.ok, code: v.code, reason: reason(lang, v) });
+    verified.push({ text: s.text, hash: s.hash, quote: s.quote, ok: v.ok, code: v.code, reason: reason(lang, v), proof: await proofOf(repo, { hash: s.hash, author }, v) });
   }
   return {
     witness: author,
