@@ -1,4 +1,4 @@
-import { git, verifyClaim } from './git.js';
+import { git, verifyClaim, proofOf } from './git.js';
 import { t, reason, normLang } from './i18n.js';
 
 // Fichiers qui font de mauvais débats : traductions, binaires, métadonnées, docs.
@@ -78,7 +78,7 @@ export async function duel(repo, a, b, { perjury = false, rounds = 3, lang = 'en
   for (const l of lines) {
     const author = witnesses[l.side];
     const v = await verifyClaim(repo, { hash: l.c.hash.slice(0, 7), quote: l.c.subject, author });
-    statements.push({ side: l.side, witness: author, text: l.text, hash: l.c.hash.slice(0, 7), quote: l.c.subject, ok: v.ok, code: v.code, reason: reason(lang, v) });
+    statements.push({ side: l.side, witness: author, text: l.text, hash: l.c.hash.slice(0, 7), quote: l.c.subject, ok: v.ok, code: v.code, reason: reason(lang, v), proof: await proofOf(repo, { hash: l.c.hash.slice(0, 7), author }, v) });
   }
   return { file: c.file, witnesses, statements };
 }

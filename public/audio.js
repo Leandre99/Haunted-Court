@@ -90,6 +90,7 @@ export function createAudio() {
     gavel: () => { tone(95, 0.6, 'sine', 0.5, 32); noise(0.25, 0.28, 220); },
     thunder: () => { noise(3, 0.45, 130, true); tone(48, 2.4, 'sine', 0.3, 26); },
     whisper: () => noise(2.4, 0.14, 1700, true),
+    beat: () => { tone(60, 0.2, 'sine', 0.3, 40); setTimeout(() => tone(55, 0.22, 'sine', 0.24, 38), 230); },
     door: () => { tone(70, 1.2, 'sawtooth', 0.12, 45); noise(1.2, 0.1, 400, true); },
     choir: () => chord([220, 261.6, 329.6, 440], 'sine', 0.2, 2.4, 6.2, 900),
     organ: () => chord([110, 130.8, 164.8, 220], 'sawtooth', 0.22, 1.8, 4.8, 520),

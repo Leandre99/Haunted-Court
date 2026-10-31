@@ -1,5 +1,5 @@
 {
- "recordedAt": "2026-10-30T22:16:04.229Z",
+ "recordedAt": "2026-10-31T11:00:50.957Z",
  "en": {
   "case": {
    "repo": ".\\demo\\django-userena",
@@ -112,7 +112,19 @@
        "quote": "Python 2.6 compatibility with OrderedDict.",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show c30cd69",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2014-10-26",
+         "@@ setup.py",
+         "+install_requires = ['easy_thumbnails',…",
+         "+try:",
+         "+    from collections import OrderedDict",
+         "+except ImportError:"
+        ]
+       }
       },
       {
        "text": "I reworked this, in 2010: ‹ Moved hacks from ``secure_required``. ›",
@@ -120,7 +132,19 @@
        "quote": "Moved hacks from ``secure_required``.",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 9012d15",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2010-12-30",
+         "@@ userena/decorators.py",
+         "-        if 'HTTP_X_FORWARDED_SSL' in r…",
+         "-            request.is_secure = lambda…",
+         "-        if 'HTTP_X_FORWARDED_PROTOCOL'…",
+         "-            request.is_secure = lambda…"
+        ]
+       }
       },
       {
        "text": "I reworked this, in 2010: ‹ Cleanup crew stopped by ›",
@@ -128,7 +152,19 @@
        "quote": "Cleanup crew stopped by",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 786e581",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2010-08-12",
+         "@@ userena/forms.py",
+         "-    Also requires the password to be e…",
+         "+    Also requires the password to be e…",
+         "+    be accepted.",
+         "-        \"\"\" Validate that the e-mail a…"
+        ]
+       }
       },
       {
        "text": "I wrote this, in 2010: ‹ Initial README ›",
@@ -136,7 +172,15 @@
        "quote": "Initial README",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 0d62548",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2010-06-25",
+         "@@ README"
+        ]
+       }
       }
      ]
     },
@@ -152,7 +196,19 @@
        "quote": "Python 2.6 compatibility with OrderedDict.",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show c30cd69",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2014-10-26",
+         "@@ setup.py",
+         "+install_requires = ['easy_thumbnails',…",
+         "+try:",
+         "+    from collections import OrderedDict",
+         "+except ImportError:"
+        ]
+       }
       },
       {
        "text": "I reworked this, in 2010: ‹ Moved hacks from ``secure_required``. ›",
@@ -160,7 +216,19 @@
        "quote": "Moved hacks from ``secure_required``.",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 9012d15",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2010-12-30",
+         "@@ userena/decorators.py",
+         "-        if 'HTTP_X_FORWARDED_SSL' in r…",
+         "-            request.is_secure = lambda…",
+         "-        if 'HTTP_X_FORWARDED_PROTOCOL'…",
+         "-            request.is_secure = lambda…"
+        ]
+       }
       },
       {
        "text": "I'm the one who did that: ‹ username url regex compile with plus ›",
@@ -168,7 +236,15 @@
        "quote": "username url regex compile with plus",
        "ok": false,
        "code": "r_other",
-       "reason": "this commit is by meomap"
+       "reason": "this commit is by meomap",
+       "proof": {
+        "cmd": "git show -s d935325",
+        "lines": [
+         "Author: meomap",
+         "claimed by: Petar Radosevic",
+         "author mismatch"
+        ]
+       }
       },
       {
        "text": "I reworked this, in 2010: ‹ Cleanup crew stopped by ›",
@@ -176,7 +252,19 @@
        "quote": "Cleanup crew stopped by",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 786e581",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2010-08-12",
+         "@@ userena/forms.py",
+         "-    Also requires the password to be e…",
+         "+    Also requires the password to be e…",
+         "+    be accepted.",
+         "-        \"\"\" Validate that the e-mail a…"
+        ]
+       }
       },
       {
        "text": "I wrote this, in 2010: ‹ Initial README ›",
@@ -184,7 +272,15 @@
        "quote": "Initial README",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 0d62548",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2010-06-25",
+         "@@ README"
+        ]
+       }
       }
      ]
     }
@@ -202,7 +298,19 @@
        "quote": "prepare new release",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 1b84156",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2015-02-24",
+         "@@ CREDITS",
+         "+Leonardo Orozco: https://github.com/le…",
+         "@@ UPDATES",
+         "-This file contains all the backwards-i…",
+         "+# UPDATES"
+        ]
+       }
       },
       {
        "text": "I wrote this, in 2015: ‹ udated credits and noted incompatibile change introduced in 1.3.1 ›",
@@ -210,7 +318,19 @@
        "quote": "udated credits and noted incompatibile change introduced in 1.3.1",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 199c24b",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2015-01-09",
+         "@@ CREDITS",
+         "-ChangeSomeCode: https://github.com/Cha…",
+         "+ChangeSomeCode: https://github.com/Cha…",
+         "+Ghassen Telmoudi: https://github.com/p…",
+         "@@ UPDATES"
+        ]
+       }
       },
       {
        "text": "I added this, in 2014: ‹ add coverage tox matrix with coveralls support ›",
@@ -218,7 +338,19 @@
        "quote": "add coverage tox matrix with coveralls support",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 9bd2ae6",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2014-11-12",
+         "@@ .travis.yml",
+         "+  - TOX_ENV=coverage",
+         "@@ README.mkd",
+         "+[![Coverage Status](https://img.shield…",
+         "@@ tox.ini"
+        ]
+       }
       },
       {
        "text": "I wrote this, in 2014: ‹ Change the way how gravatar and CommaSeperatedField tests baheaves: ›",
@@ -226,7 +358,19 @@
        "quote": "Change the way how gravatar and CommaSeperatedField tests baheaves:",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show bc8e16a",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2014-10-21",
+         "@@ userena/contrib/umessages/tests/test_fi…",
+         "+import re",
+         "-             'error': ('users', [u'The…",
+         "+             'error': ('users', [u'The…",
+         "-             'error': ('users', [u'The…"
+        ]
+       }
       }
      ]
     },
@@ -242,7 +386,19 @@
        "quote": "prepare new release",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 1b84156",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2015-02-24",
+         "@@ CREDITS",
+         "+Leonardo Orozco: https://github.com/le…",
+         "@@ UPDATES",
+         "-This file contains all the backwards-i…",
+         "+# UPDATES"
+        ]
+       }
       },
       {
        "text": "I wrote this, in 2015: ‹ udated credits and noted incompatibile change introduced in 1.3.1 ›",
@@ -250,7 +406,19 @@
        "quote": "udated credits and noted incompatibile change introduced in 1.3.1",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 199c24b",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2015-01-09",
+         "@@ CREDITS",
+         "-ChangeSomeCode: https://github.com/Cha…",
+         "+ChangeSomeCode: https://github.com/Cha…",
+         "+Ghassen Telmoudi: https://github.com/p…",
+         "@@ UPDATES"
+        ]
+       }
       },
       {
        "text": "I'm the one who did that: ‹ username url regex compile with plus ›",
@@ -258,7 +426,15 @@
        "quote": "username url regex compile with plus",
        "ok": false,
        "code": "r_other",
-       "reason": "this commit is by meomap"
+       "reason": "this commit is by meomap",
+       "proof": {
+        "cmd": "git show -s d935325",
+        "lines": [
+         "Author: meomap",
+         "claimed by: Michał Jaworski",
+         "author mismatch"
+        ]
+       }
       },
       {
        "text": "I added this, in 2014: ‹ add coverage tox matrix with coveralls support ›",
@@ -266,7 +442,19 @@
        "quote": "add coverage tox matrix with coveralls support",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 9bd2ae6",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2014-11-12",
+         "@@ .travis.yml",
+         "+  - TOX_ENV=coverage",
+         "@@ README.mkd",
+         "+[![Coverage Status](https://img.shield…",
+         "@@ tox.ini"
+        ]
+       }
       },
       {
        "text": "I wrote this, in 2014: ‹ Change the way how gravatar and CommaSeperatedField tests baheaves: ›",
@@ -274,7 +462,19 @@
        "quote": "Change the way how gravatar and CommaSeperatedField tests baheaves:",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show bc8e16a",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2014-10-21",
+         "@@ userena/contrib/umessages/tests/test_fi…",
+         "+import re",
+         "-             'error': ('users', [u'The…",
+         "+             'error': ('users', [u'The…",
+         "-             'error': ('users', [u'The…"
+        ]
+       }
       }
      ]
     }
@@ -292,7 +492,17 @@
        "quote": "Fix runtest command",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 2bbec95",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-15",
+         "@@ userena/runtests/runtests.py",
+         "-sys.path.append(os.path.join(os.path.d…",
+         "+sys.path.append(os.path.join(os.path.d…"
+        ]
+       }
       },
       {
        "text": "I wrote this, in 2015: ‹ Use Django's get_user_model()-function directly. ›",
@@ -300,7 +510,19 @@
        "quote": "Use Django's get_user_model()-function directly.",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show b90160b",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-15",
+         "@@ demo/superuser.py",
+         "-from userena.utils import get_user_mod…",
+         "+from django.contrib.auth import get_us…",
+         "@@ userena/admin.py",
+         "+from django.contrib.auth import get_us…"
+        ]
+       }
       },
       {
        "text": "I wrote this, in 2015: ‹ Django migrations for umessages app ›",
@@ -308,7 +530,19 @@
        "quote": "Django migrations for umessages app",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 3e1a0c9",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-14",
+         "@@ userena/contrib/umessages/migrations/00…",
+         "+# -*- coding: utf-8 -*-",
+         "+from __future__ import unicode_literals",
+         "+from django.db import migrations, mode…",
+         "+from django.conf import settings"
+        ]
+       }
       },
       {
        "text": "I removed this, in 2015: ‹ Remove {% load url from future %} from templates (Django 1.9 compatibility) ›",
@@ -316,7 +550,19 @@
        "quote": "Remove {% load url from future %} from templates (Django 1.9 compatibility)",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 9558b7a",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-08",
+         "@@ demo/demo/templates/base.html",
+         "-{% load url from future %}",
+         "@@ demo/demo/templates/static/promo.html",
+         "-{% load url from future %}",
+         "@@ demo/demo/templates/umessages/message_d…"
+        ]
+       }
       }
      ]
     },
@@ -332,7 +578,17 @@
        "quote": "Fix runtest command",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 2bbec95",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-15",
+         "@@ userena/runtests/runtests.py",
+         "-sys.path.append(os.path.join(os.path.d…",
+         "+sys.path.append(os.path.join(os.path.d…"
+        ]
+       }
       },
       {
        "text": "I wrote this, in 2015: ‹ Use Django's get_user_model()-function directly. ›",
@@ -340,7 +596,19 @@
        "quote": "Use Django's get_user_model()-function directly.",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show b90160b",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-15",
+         "@@ demo/superuser.py",
+         "-from userena.utils import get_user_mod…",
+         "+from django.contrib.auth import get_us…",
+         "@@ userena/admin.py",
+         "+from django.contrib.auth import get_us…"
+        ]
+       }
       },
       {
        "text": "I'm the one who did that: ‹ username url regex compile with plus ›",
@@ -348,7 +616,15 @@
        "quote": "username url regex compile with plus",
        "ok": false,
        "code": "r_other",
-       "reason": "this commit is by meomap"
+       "reason": "this commit is by meomap",
+       "proof": {
+        "cmd": "git show -s d935325",
+        "lines": [
+         "Author: meomap",
+         "claimed by: Marco Schmalz",
+         "author mismatch"
+        ]
+       }
       },
       {
        "text": "I wrote this, in 2015: ‹ Django migrations for umessages app ›",
@@ -356,7 +632,19 @@
        "quote": "Django migrations for umessages app",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 3e1a0c9",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-14",
+         "@@ userena/contrib/umessages/migrations/00…",
+         "+# -*- coding: utf-8 -*-",
+         "+from __future__ import unicode_literals",
+         "+from django.db import migrations, mode…",
+         "+from django.conf import settings"
+        ]
+       }
       },
       {
        "text": "I removed this, in 2015: ‹ Remove {% load url from future %} from templates (Django 1.9 compatibility) ›",
@@ -364,7 +652,19 @@
        "quote": "Remove {% load url from future %} from templates (Django 1.9 compatibility)",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "quote found in the commit"
+       "reason": "quote found in the commit",
+       "proof": {
+        "cmd": "git show 9558b7a",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-08",
+         "@@ demo/demo/templates/base.html",
+         "-{% load url from future %}",
+         "@@ demo/demo/templates/static/promo.html",
+         "-{% load url from future %}",
+         "@@ demo/demo/templates/umessages/message_d…"
+        ]
+       }
       }
      ]
     }
@@ -386,7 +686,19 @@
       "quote": "The big rename.. Talking about peer pressure..",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "quote found in the commit"
+      "reason": "quote found in the commit",
+      "proof": {
+       "cmd": "git show 8c82bdb",
+       "lines": [
+        "Author: Petar Radosevic",
+        "Date:   2010-07-21",
+        "@@ demo_project/settings.py",
+        "-    'userina.UserinaAuthenticationBack…",
+        "+    'userena.UserinaAuthenticationBack…",
+        "-    'userina',",
+        "+    'userena',"
+       ]
+      }
      },
      {
       "side": 1,
@@ -396,7 +708,19 @@
       "quote": "Remove old compatibility code for hash digests",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "quote found in the commit"
+      "reason": "quote found in the commit",
+      "proof": {
+       "cmd": "git show 3c19ca6",
+       "lines": [
+        "Author: Marco Schmalz",
+        "Date:   2015-12-15",
+        "@@ userena/compat.py",
+        "-# old fallback to django hashcompat",
+        "-try:",
+        "-    from hashlib import sha1 as sha_co…",
+        "-except ImportError:  # pragma: no cover"
+       ]
+      }
      },
      {
       "side": 0,
@@ -406,7 +730,19 @@
       "quote": "Refactoring profiles outside userena.",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "quote found in the commit"
+      "reason": "quote found in the commit",
+      "proof": {
+       "cmd": "git show 5786470",
+       "lines": [
+        "Author: Petar Radosevic",
+        "Date:   2010-09-01",
+        "@@ demo_project/profiles/__init__.py",
+        "@@ demo_project/profiles/models.py",
+        "+from django.db import models",
+        "+from django.utils.translation import u…",
+        "+from userena.models import UserenaBase…"
+       ]
+      }
      },
      {
       "side": 1,
@@ -416,7 +752,19 @@
       "quote": "Remove support for old truncate_words-function, always use Truncator",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "quote found in the commit"
+      "reason": "quote found in the commit",
+      "proof": {
+       "cmd": "git show 223b7ad",
+       "lines": [
+        "Author: Marco Schmalz",
+        "Date:   2015-12-15",
+        "@@ userena/utils.py",
+        "-from django.utils.six import text_type",
+        "+from django.utils.functional import al…",
+        "+from django.utils.six import text_type",
+        "+from django.utils.text import Truncator"
+       ]
+      }
      },
      {
       "side": 0,
@@ -426,7 +774,19 @@
       "quote": "Fix deprecated `truncate_words` in Django 1.6.",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "quote found in the commit"
+      "reason": "quote found in the commit",
+      "proof": {
+       "cmd": "git show a36b7da",
+       "lines": [
+        "Author: Petar Radosevic",
+        "Date:   2013-12-27",
+        "@@ demo/demo/urls.py",
+        "-from django.conf.urls.defaults import *",
+        "+from django.conf.urls import patterns,…",
+        "-from profiles.forms import SignupFormE…",
+        "@@ userena/contrib/umessages/models.py"
+       ]
+      }
      },
      {
       "side": 1,
@@ -436,7 +796,19 @@
       "quote": "Use the new Meta API for Django models.",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "quote found in the commit"
+      "reason": "quote found in the commit",
+      "proof": {
+       "cmd": "git show 3b1414d",
+       "lines": [
+        "Author: Marco Schmalz",
+        "Date:   2015-12-15",
+        "@@ userena/tests/tests_middleware.py",
+        "-        related_name = profile_model._…",
+        "+        related_name = profile_model._…",
+        "@@ userena/utils.py",
+        "-        related_name = profile_model._…"
+       ]
+      }
      }
     ]
    },
@@ -455,7 +827,19 @@
       "quote": "The big rename.. Talking about peer pressure..",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "quote found in the commit"
+      "reason": "quote found in the commit",
+      "proof": {
+       "cmd": "git show 8c82bdb",
+       "lines": [
+        "Author: Petar Radosevic",
+        "Date:   2010-07-21",
+        "@@ demo_project/settings.py",
+        "-    'userina.UserinaAuthenticationBack…",
+        "+    'userena.UserinaAuthenticationBack…",
+        "-    'userina',",
+        "+    'userena',"
+       ]
+      }
      },
      {
       "side": 1,
@@ -465,7 +849,19 @@
       "quote": "Remove old compatibility code for hash digests",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "quote found in the commit"
+      "reason": "quote found in the commit",
+      "proof": {
+       "cmd": "git show 3c19ca6",
+       "lines": [
+        "Author: Marco Schmalz",
+        "Date:   2015-12-15",
+        "@@ userena/compat.py",
+        "-# old fallback to django hashcompat",
+        "-try:",
+        "-    from hashlib import sha1 as sha_co…",
+        "-except ImportError:  # pragma: no cover"
+       ]
+      }
      },
      {
       "side": 0,
@@ -475,7 +871,19 @@
       "quote": "Refactoring profiles outside userena.",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "quote found in the commit"
+      "reason": "quote found in the commit",
+      "proof": {
+       "cmd": "git show 5786470",
+       "lines": [
+        "Author: Petar Radosevic",
+        "Date:   2010-09-01",
+        "@@ demo_project/profiles/__init__.py",
+        "@@ demo_project/profiles/models.py",
+        "+from django.db import models",
+        "+from django.utils.translation import u…",
+        "+from userena.models import UserenaBase…"
+       ]
+      }
      },
      {
       "side": 1,
@@ -485,7 +893,15 @@
       "quote": "Refactoring profiles outside userena.",
       "ok": false,
       "code": "r_other",
-      "reason": "this commit is by Petar Radosevic"
+      "reason": "this commit is by Petar Radosevic",
+      "proof": {
+       "cmd": "git show -s 5786470",
+       "lines": [
+        "Author: Petar Radosevic",
+        "claimed by: Marco Schmalz",
+        "author mismatch"
+       ]
+      }
      },
      {
       "side": 0,
@@ -495,7 +911,19 @@
       "quote": "Fix deprecated `truncate_words` in Django 1.6.",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "quote found in the commit"
+      "reason": "quote found in the commit",
+      "proof": {
+       "cmd": "git show a36b7da",
+       "lines": [
+        "Author: Petar Radosevic",
+        "Date:   2013-12-27",
+        "@@ demo/demo/urls.py",
+        "-from django.conf.urls.defaults import *",
+        "+from django.conf.urls import patterns,…",
+        "-from profiles.forms import SignupFormE…",
+        "@@ userena/contrib/umessages/models.py"
+       ]
+      }
      },
      {
       "side": 1,
@@ -505,7 +933,19 @@
       "quote": "Use the new Meta API for Django models.",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "quote found in the commit"
+      "reason": "quote found in the commit",
+      "proof": {
+       "cmd": "git show 3b1414d",
+       "lines": [
+        "Author: Marco Schmalz",
+        "Date:   2015-12-15",
+        "@@ userena/tests/tests_middleware.py",
+        "-        related_name = profile_model._…",
+        "+        related_name = profile_model._…",
+        "@@ userena/utils.py",
+        "-        related_name = profile_model._…"
+       ]
+      }
      }
     ]
    }
@@ -518,7 +958,7 @@
    "path": ".\\verdicts\\django-userena-verdict.git",
    "lines": [
     "branch haunted-court/verdict created",
-    "commit b6c5be0 docs: migration plan delivered by Haunted Court",
+    "commit 38f7460 docs: migration plan delivered by Haunted Court",
     "repository: .\\verdicts\\django-userena-verdict.git",
     "report: .\\verdicts\\django-userena-verdict.md"
    ]
@@ -636,7 +1076,19 @@
        "quote": "Python 2.6 compatibility with OrderedDict.",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show c30cd69",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2014-10-26",
+         "@@ setup.py",
+         "+install_requires = ['easy_thumbnails',…",
+         "+try:",
+         "+    from collections import OrderedDict",
+         "+except ImportError:"
+        ]
+       }
       },
       {
        "text": "J’ai remanié ceci, en 2010 : ‹ Moved hacks from ``secure_required``. ›",
@@ -644,7 +1096,19 @@
        "quote": "Moved hacks from ``secure_required``.",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 9012d15",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2010-12-30",
+         "@@ userena/decorators.py",
+         "-        if 'HTTP_X_FORWARDED_SSL' in r…",
+         "-            request.is_secure = lambda…",
+         "-        if 'HTTP_X_FORWARDED_PROTOCOL'…",
+         "-            request.is_secure = lambda…"
+        ]
+       }
       },
       {
        "text": "J’ai remanié ceci, en 2010 : ‹ Cleanup crew stopped by ›",
@@ -652,7 +1116,19 @@
        "quote": "Cleanup crew stopped by",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 786e581",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2010-08-12",
+         "@@ userena/forms.py",
+         "-    Also requires the password to be e…",
+         "+    Also requires the password to be e…",
+         "+    be accepted.",
+         "-        \"\"\" Validate that the e-mail a…"
+        ]
+       }
       },
       {
        "text": "J’ai écrit ceci, en 2010 : ‹ Initial README ›",
@@ -660,7 +1136,15 @@
        "quote": "Initial README",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 0d62548",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2010-06-25",
+         "@@ README"
+        ]
+       }
       }
      ]
     },
@@ -676,7 +1160,19 @@
        "quote": "Python 2.6 compatibility with OrderedDict.",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show c30cd69",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2014-10-26",
+         "@@ setup.py",
+         "+install_requires = ['easy_thumbnails',…",
+         "+try:",
+         "+    from collections import OrderedDict",
+         "+except ImportError:"
+        ]
+       }
       },
       {
        "text": "J’ai remanié ceci, en 2010 : ‹ Moved hacks from ``secure_required``. ›",
@@ -684,7 +1180,19 @@
        "quote": "Moved hacks from ``secure_required``.",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 9012d15",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2010-12-30",
+         "@@ userena/decorators.py",
+         "-        if 'HTTP_X_FORWARDED_SSL' in r…",
+         "-            request.is_secure = lambda…",
+         "-        if 'HTTP_X_FORWARDED_PROTOCOL'…",
+         "-            request.is_secure = lambda…"
+        ]
+       }
       },
       {
        "text": "C’est moi qui ai fait ça : ‹ username url regex compile with plus ›",
@@ -692,7 +1200,15 @@
        "quote": "username url regex compile with plus",
        "ok": false,
        "code": "r_other",
-       "reason": "ce commit est de meomap"
+       "reason": "ce commit est de meomap",
+       "proof": {
+        "cmd": "git show -s d935325",
+        "lines": [
+         "Author: meomap",
+         "claimed by: Petar Radosevic",
+         "author mismatch"
+        ]
+       }
       },
       {
        "text": "J’ai remanié ceci, en 2010 : ‹ Cleanup crew stopped by ›",
@@ -700,7 +1216,19 @@
        "quote": "Cleanup crew stopped by",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 786e581",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2010-08-12",
+         "@@ userena/forms.py",
+         "-    Also requires the password to be e…",
+         "+    Also requires the password to be e…",
+         "+    be accepted.",
+         "-        \"\"\" Validate that the e-mail a…"
+        ]
+       }
       },
       {
        "text": "J’ai écrit ceci, en 2010 : ‹ Initial README ›",
@@ -708,7 +1236,15 @@
        "quote": "Initial README",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 0d62548",
+        "lines": [
+         "Author: Petar Radosevic",
+         "Date:   2010-06-25",
+         "@@ README"
+        ]
+       }
       }
      ]
     }
@@ -726,7 +1262,19 @@
        "quote": "prepare new release",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 1b84156",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2015-02-24",
+         "@@ CREDITS",
+         "+Leonardo Orozco: https://github.com/le…",
+         "@@ UPDATES",
+         "-This file contains all the backwards-i…",
+         "+# UPDATES"
+        ]
+       }
       },
       {
        "text": "J’ai écrit ceci, en 2015 : ‹ udated credits and noted incompatibile change introduced in 1.3.1 ›",
@@ -734,7 +1282,19 @@
        "quote": "udated credits and noted incompatibile change introduced in 1.3.1",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 199c24b",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2015-01-09",
+         "@@ CREDITS",
+         "-ChangeSomeCode: https://github.com/Cha…",
+         "+ChangeSomeCode: https://github.com/Cha…",
+         "+Ghassen Telmoudi: https://github.com/p…",
+         "@@ UPDATES"
+        ]
+       }
       },
       {
        "text": "J’ai ajouté ceci, en 2014 : ‹ add coverage tox matrix with coveralls support ›",
@@ -742,7 +1302,19 @@
        "quote": "add coverage tox matrix with coveralls support",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 9bd2ae6",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2014-11-12",
+         "@@ .travis.yml",
+         "+  - TOX_ENV=coverage",
+         "@@ README.mkd",
+         "+[![Coverage Status](https://img.shield…",
+         "@@ tox.ini"
+        ]
+       }
       },
       {
        "text": "J’ai écrit ceci, en 2014 : ‹ Change the way how gravatar and CommaSeperatedField tests baheaves: ›",
@@ -750,7 +1322,19 @@
        "quote": "Change the way how gravatar and CommaSeperatedField tests baheaves:",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show bc8e16a",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2014-10-21",
+         "@@ userena/contrib/umessages/tests/test_fi…",
+         "+import re",
+         "-             'error': ('users', [u'The…",
+         "+             'error': ('users', [u'The…",
+         "-             'error': ('users', [u'The…"
+        ]
+       }
       }
      ]
     },
@@ -766,7 +1350,19 @@
        "quote": "prepare new release",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 1b84156",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2015-02-24",
+         "@@ CREDITS",
+         "+Leonardo Orozco: https://github.com/le…",
+         "@@ UPDATES",
+         "-This file contains all the backwards-i…",
+         "+# UPDATES"
+        ]
+       }
       },
       {
        "text": "J’ai écrit ceci, en 2015 : ‹ udated credits and noted incompatibile change introduced in 1.3.1 ›",
@@ -774,7 +1370,19 @@
        "quote": "udated credits and noted incompatibile change introduced in 1.3.1",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 199c24b",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2015-01-09",
+         "@@ CREDITS",
+         "-ChangeSomeCode: https://github.com/Cha…",
+         "+ChangeSomeCode: https://github.com/Cha…",
+         "+Ghassen Telmoudi: https://github.com/p…",
+         "@@ UPDATES"
+        ]
+       }
       },
       {
        "text": "C’est moi qui ai fait ça : ‹ username url regex compile with plus ›",
@@ -782,7 +1390,15 @@
        "quote": "username url regex compile with plus",
        "ok": false,
        "code": "r_other",
-       "reason": "ce commit est de meomap"
+       "reason": "ce commit est de meomap",
+       "proof": {
+        "cmd": "git show -s d935325",
+        "lines": [
+         "Author: meomap",
+         "claimed by: Michał Jaworski",
+         "author mismatch"
+        ]
+       }
       },
       {
        "text": "J’ai ajouté ceci, en 2014 : ‹ add coverage tox matrix with coveralls support ›",
@@ -790,7 +1406,19 @@
        "quote": "add coverage tox matrix with coveralls support",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 9bd2ae6",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2014-11-12",
+         "@@ .travis.yml",
+         "+  - TOX_ENV=coverage",
+         "@@ README.mkd",
+         "+[![Coverage Status](https://img.shield…",
+         "@@ tox.ini"
+        ]
+       }
       },
       {
        "text": "J’ai écrit ceci, en 2014 : ‹ Change the way how gravatar and CommaSeperatedField tests baheaves: ›",
@@ -798,7 +1426,19 @@
        "quote": "Change the way how gravatar and CommaSeperatedField tests baheaves:",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show bc8e16a",
+        "lines": [
+         "Author: Michał Jaworski",
+         "Date:   2014-10-21",
+         "@@ userena/contrib/umessages/tests/test_fi…",
+         "+import re",
+         "-             'error': ('users', [u'The…",
+         "+             'error': ('users', [u'The…",
+         "-             'error': ('users', [u'The…"
+        ]
+       }
       }
      ]
     }
@@ -816,7 +1456,17 @@
        "quote": "Fix runtest command",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 2bbec95",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-15",
+         "@@ userena/runtests/runtests.py",
+         "-sys.path.append(os.path.join(os.path.d…",
+         "+sys.path.append(os.path.join(os.path.d…"
+        ]
+       }
       },
       {
        "text": "J’ai écrit ceci, en 2015 : ‹ Use Django's get_user_model()-function directly. ›",
@@ -824,7 +1474,19 @@
        "quote": "Use Django's get_user_model()-function directly.",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show b90160b",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-15",
+         "@@ demo/superuser.py",
+         "-from userena.utils import get_user_mod…",
+         "+from django.contrib.auth import get_us…",
+         "@@ userena/admin.py",
+         "+from django.contrib.auth import get_us…"
+        ]
+       }
       },
       {
        "text": "J’ai écrit ceci, en 2015 : ‹ Django migrations for umessages app ›",
@@ -832,7 +1494,19 @@
        "quote": "Django migrations for umessages app",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 3e1a0c9",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-14",
+         "@@ userena/contrib/umessages/migrations/00…",
+         "+# -*- coding: utf-8 -*-",
+         "+from __future__ import unicode_literals",
+         "+from django.db import migrations, mode…",
+         "+from django.conf import settings"
+        ]
+       }
       },
       {
        "text": "J’ai supprimé ceci, en 2015 : ‹ Remove {% load url from future %} from templates (Django 1.9 compatibility) ›",
@@ -840,7 +1514,19 @@
        "quote": "Remove {% load url from future %} from templates (Django 1.9 compatibility)",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 9558b7a",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-08",
+         "@@ demo/demo/templates/base.html",
+         "-{% load url from future %}",
+         "@@ demo/demo/templates/static/promo.html",
+         "-{% load url from future %}",
+         "@@ demo/demo/templates/umessages/message_d…"
+        ]
+       }
       }
      ]
     },
@@ -856,7 +1542,17 @@
        "quote": "Fix runtest command",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 2bbec95",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-15",
+         "@@ userena/runtests/runtests.py",
+         "-sys.path.append(os.path.join(os.path.d…",
+         "+sys.path.append(os.path.join(os.path.d…"
+        ]
+       }
       },
       {
        "text": "J’ai écrit ceci, en 2015 : ‹ Use Django's get_user_model()-function directly. ›",
@@ -864,7 +1560,19 @@
        "quote": "Use Django's get_user_model()-function directly.",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show b90160b",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-15",
+         "@@ demo/superuser.py",
+         "-from userena.utils import get_user_mod…",
+         "+from django.contrib.auth import get_us…",
+         "@@ userena/admin.py",
+         "+from django.contrib.auth import get_us…"
+        ]
+       }
       },
       {
        "text": "C’est moi qui ai fait ça : ‹ username url regex compile with plus ›",
@@ -872,7 +1580,15 @@
        "quote": "username url regex compile with plus",
        "ok": false,
        "code": "r_other",
-       "reason": "ce commit est de meomap"
+       "reason": "ce commit est de meomap",
+       "proof": {
+        "cmd": "git show -s d935325",
+        "lines": [
+         "Author: meomap",
+         "claimed by: Marco Schmalz",
+         "author mismatch"
+        ]
+       }
       },
       {
        "text": "J’ai écrit ceci, en 2015 : ‹ Django migrations for umessages app ›",
@@ -880,7 +1596,19 @@
        "quote": "Django migrations for umessages app",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 3e1a0c9",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-14",
+         "@@ userena/contrib/umessages/migrations/00…",
+         "+# -*- coding: utf-8 -*-",
+         "+from __future__ import unicode_literals",
+         "+from django.db import migrations, mode…",
+         "+from django.conf import settings"
+        ]
+       }
       },
       {
        "text": "J’ai supprimé ceci, en 2015 : ‹ Remove {% load url from future %} from templates (Django 1.9 compatibility) ›",
@@ -888,7 +1616,19 @@
        "quote": "Remove {% load url from future %} from templates (Django 1.9 compatibility)",
        "ok": true,
        "code": "r_quote_ok",
-       "reason": "extrait trouvé dans le commit"
+       "reason": "extrait trouvé dans le commit",
+       "proof": {
+        "cmd": "git show 9558b7a",
+        "lines": [
+         "Author: Marco Schmalz",
+         "Date:   2015-12-08",
+         "@@ demo/demo/templates/base.html",
+         "-{% load url from future %}",
+         "@@ demo/demo/templates/static/promo.html",
+         "-{% load url from future %}",
+         "@@ demo/demo/templates/umessages/message_d…"
+        ]
+       }
       }
      ]
     }
@@ -910,7 +1650,19 @@
       "quote": "The big rename.. Talking about peer pressure..",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "extrait trouvé dans le commit"
+      "reason": "extrait trouvé dans le commit",
+      "proof": {
+       "cmd": "git show 8c82bdb",
+       "lines": [
+        "Author: Petar Radosevic",
+        "Date:   2010-07-21",
+        "@@ demo_project/settings.py",
+        "-    'userina.UserinaAuthenticationBack…",
+        "+    'userena.UserinaAuthenticationBack…",
+        "-    'userina',",
+        "+    'userena',"
+       ]
+      }
      },
      {
       "side": 1,
@@ -920,7 +1672,19 @@
       "quote": "Remove old compatibility code for hash digests",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "extrait trouvé dans le commit"
+      "reason": "extrait trouvé dans le commit",
+      "proof": {
+       "cmd": "git show 3c19ca6",
+       "lines": [
+        "Author: Marco Schmalz",
+        "Date:   2015-12-15",
+        "@@ userena/compat.py",
+        "-# old fallback to django hashcompat",
+        "-try:",
+        "-    from hashlib import sha1 as sha_co…",
+        "-except ImportError:  # pragma: no cover"
+       ]
+      }
      },
      {
       "side": 0,
@@ -930,7 +1694,19 @@
       "quote": "Refactoring profiles outside userena.",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "extrait trouvé dans le commit"
+      "reason": "extrait trouvé dans le commit",
+      "proof": {
+       "cmd": "git show 5786470",
+       "lines": [
+        "Author: Petar Radosevic",
+        "Date:   2010-09-01",
+        "@@ demo_project/profiles/__init__.py",
+        "@@ demo_project/profiles/models.py",
+        "+from django.db import models",
+        "+from django.utils.translation import u…",
+        "+from userena.models import UserenaBase…"
+       ]
+      }
      },
      {
       "side": 1,
@@ -940,7 +1716,19 @@
       "quote": "Remove support for old truncate_words-function, always use Truncator",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "extrait trouvé dans le commit"
+      "reason": "extrait trouvé dans le commit",
+      "proof": {
+       "cmd": "git show 223b7ad",
+       "lines": [
+        "Author: Marco Schmalz",
+        "Date:   2015-12-15",
+        "@@ userena/utils.py",
+        "-from django.utils.six import text_type",
+        "+from django.utils.functional import al…",
+        "+from django.utils.six import text_type",
+        "+from django.utils.text import Truncator"
+       ]
+      }
      },
      {
       "side": 0,
@@ -950,7 +1738,19 @@
       "quote": "Fix deprecated `truncate_words` in Django 1.6.",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "extrait trouvé dans le commit"
+      "reason": "extrait trouvé dans le commit",
+      "proof": {
+       "cmd": "git show a36b7da",
+       "lines": [
+        "Author: Petar Radosevic",
+        "Date:   2013-12-27",
+        "@@ demo/demo/urls.py",
+        "-from django.conf.urls.defaults import *",
+        "+from django.conf.urls import patterns,…",
+        "-from profiles.forms import SignupFormE…",
+        "@@ userena/contrib/umessages/models.py"
+       ]
+      }
      },
      {
       "side": 1,
@@ -960,7 +1760,19 @@
       "quote": "Use the new Meta API for Django models.",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "extrait trouvé dans le commit"
+      "reason": "extrait trouvé dans le commit",
+      "proof": {
+       "cmd": "git show 3b1414d",
+       "lines": [
+        "Author: Marco Schmalz",
+        "Date:   2015-12-15",
+        "@@ userena/tests/tests_middleware.py",
+        "-        related_name = profile_model._…",
+        "+        related_name = profile_model._…",
+        "@@ userena/utils.py",
+        "-        related_name = profile_model._…"
+       ]
+      }
      }
     ]
    },
@@ -979,7 +1791,19 @@
       "quote": "The big rename.. Talking about peer pressure..",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "extrait trouvé dans le commit"
+      "reason": "extrait trouvé dans le commit",
+      "proof": {
+       "cmd": "git show 8c82bdb",
+       "lines": [
+        "Author: Petar Radosevic",
+        "Date:   2010-07-21",
+        "@@ demo_project/settings.py",
+        "-    'userina.UserinaAuthenticationBack…",
+        "+    'userena.UserinaAuthenticationBack…",
+        "-    'userina',",
+        "+    'userena',"
+       ]
+      }
      },
      {
       "side": 1,
@@ -989,7 +1813,19 @@
       "quote": "Remove old compatibility code for hash digests",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "extrait trouvé dans le commit"
+      "reason": "extrait trouvé dans le commit",
+      "proof": {
+       "cmd": "git show 3c19ca6",
+       "lines": [
+        "Author: Marco Schmalz",
+        "Date:   2015-12-15",
+        "@@ userena/compat.py",
+        "-# old fallback to django hashcompat",
+        "-try:",
+        "-    from hashlib import sha1 as sha_co…",
+        "-except ImportError:  # pragma: no cover"
+       ]
+      }
      },
      {
       "side": 0,
@@ -999,7 +1835,19 @@
       "quote": "Refactoring profiles outside userena.",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "extrait trouvé dans le commit"
+      "reason": "extrait trouvé dans le commit",
+      "proof": {
+       "cmd": "git show 5786470",
+       "lines": [
+        "Author: Petar Radosevic",
+        "Date:   2010-09-01",
+        "@@ demo_project/profiles/__init__.py",
+        "@@ demo_project/profiles/models.py",
+        "+from django.db import models",
+        "+from django.utils.translation import u…",
+        "+from userena.models import UserenaBase…"
+       ]
+      }
      },
      {
       "side": 1,
@@ -1009,7 +1857,15 @@
       "quote": "Refactoring profiles outside userena.",
       "ok": false,
       "code": "r_other",
-      "reason": "ce commit est de Petar Radosevic"
+      "reason": "ce commit est de Petar Radosevic",
+      "proof": {
+       "cmd": "git show -s 5786470",
+       "lines": [
+        "Author: Petar Radosevic",
+        "claimed by: Marco Schmalz",
+        "author mismatch"
+       ]
+      }
      },
      {
       "side": 0,
@@ -1019,7 +1875,19 @@
       "quote": "Fix deprecated `truncate_words` in Django 1.6.",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "extrait trouvé dans le commit"
+      "reason": "extrait trouvé dans le commit",
+      "proof": {
+       "cmd": "git show a36b7da",
+       "lines": [
+        "Author: Petar Radosevic",
+        "Date:   2013-12-27",
+        "@@ demo/demo/urls.py",
+        "-from django.conf.urls.defaults import *",
+        "+from django.conf.urls import patterns,…",
+        "-from profiles.forms import SignupFormE…",
+        "@@ userena/contrib/umessages/models.py"
+       ]
+      }
      },
      {
       "side": 1,
@@ -1029,7 +1897,19 @@
       "quote": "Use the new Meta API for Django models.",
       "ok": true,
       "code": "r_quote_ok",
-      "reason": "extrait trouvé dans le commit"
+      "reason": "extrait trouvé dans le commit",
+      "proof": {
+       "cmd": "git show 3b1414d",
+       "lines": [
+        "Author: Marco Schmalz",
+        "Date:   2015-12-15",
+        "@@ userena/tests/tests_middleware.py",
+        "-        related_name = profile_model._…",
+        "+        related_name = profile_model._…",
+        "@@ userena/utils.py",
+        "-        related_name = profile_model._…"
+       ]
+      }
      }
     ]
    }
@@ -1042,7 +1922,7 @@
    "path": ".\\verdicts\\django-userena-verdict.git",
    "lines": [
     "branche haunted-court/verdict créée",
-    "commit 68cedc9 docs: plan de migration rendu par Haunted Court",
+    "commit 86589c0 docs: plan de migration rendu par Haunted Court",
     "dépôt : .\\verdicts\\django-userena-verdict.git",
     "rapport : .\\verdicts\\django-userena-verdict.md"
    ]

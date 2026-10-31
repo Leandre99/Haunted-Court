@@ -99,3 +99,22 @@ ol.say{list-style:none;margin:0;padding:0;display:grid;gap:9px}
 .langbtn:hover{border-color:var(--spectral);color:var(--spectral)}
 body.in .langbtn{bottom:auto;top:calc(46vh + 24px)}
 @media (max-width:1000px){body.in .langbtn{top:auto;bottom:max(86px,env(safe-area-inset-bottom))}}
+
+/* --- phase, cinéma, boutons (design de la maquette) --- */
+.phase{position:absolute;z-index:4;left:50%;bottom:calc(env(safe-area-inset-bottom) + 6px);transform:translateX(-50%);font:12px var(--mono);letter-spacing:.14em;text-transform:uppercase;padding:5px 12px;border:1px solid var(--ember);color:var(--ember);background:rgba(10,7,16,.6);transition:all .4s;pointer-events:none;white-space:nowrap}
+.phase.live{background:var(--ember);color:var(--ink)}
+body:not(.in) .phase{opacity:0}
+.title .row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.btns{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.stage::before,.stage::after{content:"";position:absolute;left:0;right:0;height:0;background:#000;z-index:5;transition:height 1.2s;pointer-events:none}
+.stage::before{top:0}.stage::after{bottom:0}
+.stage.cine::before,.stage.cine::after{height:8%}
+.stage.cine .hud.left,.stage.cine .hud.right,.stage.cine .tally,.stage.cine .btns,.stage.cine .note,.stage.cine .langbtn{opacity:0;pointer-events:none}
+.stage.cine .hud.bottom{bottom:calc(8% + 14px)}
+.stage.cine .say li:not(:last-child){display:none}
+.stage.cine .testi{flex:0 1 780px;margin:0 auto;background:rgba(5,3,8,.62);max-height:none}
+.stage.cine .s .t{font-size:22px}
+.stage.cine .phase{bottom:calc(8% + 6px)}
+.tally strong{min-width:1.4ch}
+#no{color:var(--ember)}
+@media (max-width:700px){.tally{gap:10px;padding:6px 10px}.btns{justify-content:stretch}.btns .btn{flex:1;padding:10px 8px}}

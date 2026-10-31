@@ -83,3 +83,31 @@ export async function verifyClaim(repo, { hash, quote, author }) {
   }
   return { ok: true, code: 'r_ok', full };
 }
+
+const clip = (s, n = 46) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
+
+/**
+ * Ce que git répond réellement pour un commit cité : sert de « pièce à conviction » affichée dans la salle.
+ * Les lignes viennent de git lui-même (git show / git cat-file), pas d'un texte inventé.
+ */
+export async function proofOf(repo, claim, v) {
+  const hash = claim.hash;
+  if (!hash || !HASH.test(hash)) return { cmd: 'git cat-file -e ?', lines: ['fatal: not a valid object name', 'exit code 128'] };
+  if (v.code === 'r_missing') {
+    let msg = `fatal: Not a valid object name ${hash}`;
+    try { await run('git', ['-C', repo, 'cat-file', '-e', hash]); } catch (e) { msg = String(e.stderr || msg).split('\n')[0] || msg; }
+    return { cmd: `git cat-file -e ${hash}`, lines: [clip(msg), 'exit code 128'] };
+  }
+  const out = await git(repo, ['show', '--no-color', '--unified=0', '--date=short', '--format=Author: %an%nDate:   %ad%n%s', hash], { allowFail: true });
+  const rows = out.split('\n');
+  const head = rows.slice(0, 3).map((l) => clip(l));
+  if (v.code === 'r_other') return { cmd: `git show -s ${hash}`, lines: [head[0], `claimed by: ${claim.author}`, 'author mismatch'] };
+  const body = [];
+  for (const l of rows.slice(3)) {
+    if (/^diff --git/.test(l)) body.push('@@ ' + clip(l.split(' b/')[1] ?? '', 40));
+    else if (/^[+-]/.test(l) && !/^(\+\+\+|---)/.test(l) && l.trim().length > 1) body.push(clip(l, 40));
+    if (body.length >= 5) break;
+  }
+  if (v.code === 'r_no_quote') return { cmd: `git show ${hash}`, lines: [...head.slice(0, 2), 'quote not found in commit'] };
+  return { cmd: `git show ${hash}`, lines: [...head.slice(0, 2), ...body].slice(0, 7) };
+}
