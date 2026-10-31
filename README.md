@@ -43,7 +43,7 @@ Specs (`.kiro/specs/`), steering docs (`.kiro/steering/`) and a hook (`.kiro/hoo
 
 ## Third-party material
 
-The demonstration repository (django-userena, BSD licensed) is third-party code cloned at runtime into `demo/` and is not part of this repository. three.js is loaded from a CDN.
+The demonstration repository (django-userena, BSD licensed) is third-party code cloned at runtime into `demo/` and is not part of this repository. three.js is loaded from a CDN. Textures (old stone wall, checkered pavement tiles, dark planks) and the interior HDRI (small cathedral) in `public/assets/` come from [Poly Haven](https://polyhaven.com) under the CC0 license; `node scripts/fetch-assets.mjs` re-downloads them.
 
 ## License
 
