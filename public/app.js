@@ -321,5 +321,11 @@ addEventListener('load', () => {
     enter();
     if (h === '#duel' || h === '#duelmenteur') { if (h === '#duelmenteur') $('perjury').checked = true; setTimeout(() => runDuel(), 2500); }
     if (h === '#demo') setTimeout(() => summonWitness(0), 2500);
+    // Raccourcis pour les captures : un ou deux fantômes déjà apparus, sans rituel.
+    if (h === '#ghost' || h === '#ghosts') {
+      const two = h === '#ghosts';
+      sceneApi?.tint(0, TINTS[0]); sceneApi?.tint(1, TINTS[1]); sceneApi?.place(0, two ? -2.4 : 0); if (two) sceneApi?.place(1, 2.4);
+      sceneApi?.appear(0, 1, 50); if (two) sceneApi?.appear(1, 1, 50); sceneApi?.shot(two ? 'duel' : 'ghost', 4);
+    }
   }, 200);
 });

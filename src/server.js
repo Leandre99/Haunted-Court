@@ -21,7 +21,7 @@ const DEFAULT_REPO = existsSync(join(ROOT, 'demo', 'django-userena', '.git')) ? 
 
 const repoOf = (wanted) => (PUBLIC_MODE ? DEFAULT_REPO : resolve(wanted || DEFAULT_REPO));
 
-const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json' };
+const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png', '.hdr': 'application/octet-stream' };
 
 const cache = new Map();
 async function load(repo, lang) {

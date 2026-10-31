@@ -6,6 +6,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { Reflector } from 'three/addons/objects/Reflector.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
 export function createScene(canvas) {
   const T = THREE;
@@ -60,62 +61,34 @@ export function createScene(canvas) {
     g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.35, 'rgba(255,255,255,.45)'); g.addColorStop(1, 'rgba(255,255,255,0)');
     c.fillStyle = g; c.fillRect(0, 0, w, h);
   });
-  const stoneTex = canvasTex(256, 256, (c, w, h) => {
-    c.fillStyle = '#1b1424'; c.fillRect(0, 0, w, h);
-    for (let i = 0; i < 1400; i++) { c.fillStyle = `rgba(${20 + Math.random() * 30 | 0},${15 + Math.random() * 20 | 0},${30 + Math.random() * 30 | 0},.35)`; c.fillRect(Math.random() * w, Math.random() * h, 2 + Math.random() * 5, 2 + Math.random() * 5); }
-    c.strokeStyle = 'rgba(0,0,0,.65)'; c.lineWidth = 3;
-    for (let y = 0; y <= h; y += 64) { c.beginPath(); c.moveTo(0, y); c.lineTo(w, y); c.stroke(); for (let x = ((y / 64) % 2) * 64; x < w; x += 128) { c.beginPath(); c.moveTo(x, y); c.lineTo(x, y + 64); c.stroke(); } }
-  });
-  stoneTex.wrapS = stoneTex.wrapT = T.RepeatWrapping; stoneTex.repeat.set(4, 3);
-  const floorTex = canvasTex(256, 256, (c, w, h) => {
-    for (let y = 0; y < 4; y++) for (let x = 0; x < 4; x++) { c.fillStyle = (x + y) % 2 ? '#150f1d' : '#0d0913'; c.fillRect(x * 64, y * 64, 64, 64); }
-    c.strokeStyle = 'rgba(150,130,190,.12)'; c.lineWidth = 1.5;
-    for (let i = 0; i < 14; i++) { c.beginPath(); const x = Math.random() * w, y = Math.random() * h; c.moveTo(x, y); c.lineTo(x + (Math.random() - 0.5) * 60, y + (Math.random() - 0.5) * 60); c.stroke(); }
-  });
-  floorTex.wrapS = floorTex.wrapT = T.RepeatWrapping; floorTex.repeat.set(8, 14);
 
-  // Carte de normales calculée à partir d'une carte de hauteur (en niveaux de gris) : donne du relief réel à la pierre et au bois.
-  function normalFrom(source, strength = 2.2) {
-    const w = source.width, h = source.height, sctx = source.getContext('2d'), src = sctx.getImageData(0, 0, w, h).data;
-    const out = document.createElement('canvas'); out.width = w; out.height = h;
-    const octx = out.getContext('2d'), dst = octx.createImageData(w, h);
-    const g = (x, y) => { const i = (((y + h) % h) * w + ((x + w) % w)) * 4; return (src[i] + src[i + 1] + src[i + 2]) / 765; };
-    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-      const dx = (g(x + 1, y) - g(x - 1, y)) * strength, dy = (g(x, y + 1) - g(x, y - 1)) * strength, l = Math.hypot(dx, dy, 1), i = (y * w + x) * 4;
-      dst.data[i] = (-dx / l * 0.5 + 0.5) * 255; dst.data[i + 1] = (-dy / l * 0.5 + 0.5) * 255; dst.data[i + 2] = (1 / l * 0.5 + 0.5) * 255; dst.data[i + 3] = 255;
-    }
-    octx.putImageData(dst, 0, 0);
-    const t = new T.CanvasTexture(out); t.wrapS = t.wrapT = T.RepeatWrapping; t.anisotropy = 4; return t;
+  // Textures PBR photographiques (Poly Haven, licence CC0) : couleur, relief, rugosité, occlusion ambiante.
+  const texLoader = new T.TextureLoader();
+  const texSet = (name) => Object.fromEntries(['diff', 'nor', 'rough', 'ao'].map((k) => [k, texLoader.load(`/assets/tex/${name}_${k}.jpg`)]));
+  const SETS = { wall: texSet('wall'), floor: texSet('floor'), wood: texSet('wood') };
+  function pbr(set, rx, ry, { color = 0xffffff, normal = 1, metal = 0 } = {}) {
+    const cl = (t) => { const c = t.clone(); c.wrapS = c.wrapT = T.RepeatWrapping; c.repeat.set(rx, ry); c.anisotropy = 8; c.needsUpdate = true; return c; };
+    return new T.MeshStandardMaterial({ color, map: cl(set.diff), normalMap: cl(set.nor), normalScale: new T.Vector2(normal, normal), roughnessMap: cl(set.rough), roughness: 1, aoMap: cl(set.ao), metalness: metal });
   }
-  const woodCv = document.createElement('canvas'); woodCv.width = woodCv.height = 256;
-  {
-    const c = woodCv.getContext('2d'); c.fillStyle = '#6b4a2e'; c.fillRect(0, 0, 256, 256);
-    for (let i = 0; i < 90; i++) { const y = Math.random() * 256, a = 0.05 + Math.random() * 0.12; c.strokeStyle = Math.random() < 0.5 ? 'rgba(30,15,5,' + a + ')' : 'rgba(150,100,55,' + a + ')'; c.lineWidth = 0.6 + Math.random() * 2.2; c.beginPath(); c.moveTo(0, y); for (let x = 0; x <= 256; x += 16) c.lineTo(x, y + Math.sin(x * 0.04 + i) * 3 + (Math.random() - 0.5) * 1.2); c.stroke(); }
-    for (let i = 0; i < 6; i++) { const x = Math.random() * 256, y = Math.random() * 256; const rg = c.createRadialGradient(x, y, 1, x, y, 10 + Math.random() * 8); rg.addColorStop(0, 'rgba(20,10,3,.55)'); rg.addColorStop(1, 'rgba(20,10,3,0)'); c.fillStyle = rg; c.fillRect(x - 20, y - 20, 40, 40); }
-  }
-  const woodMap = new T.CanvasTexture(woodCv); woodMap.wrapS = woodMap.wrapT = T.RepeatWrapping; woodMap.anisotropy = 4;
-  const woodNormal = normalFrom(woodCv, 2.6);
-  const stoneNormal = normalFrom(stoneTex.image, 3.2); stoneNormal.repeat.set(4, 3);
-  const floorNormal = normalFrom(floorTex.image, 2.4); floorNormal.repeat.set(8, 14);
-  // Bois verni (tinté par la couleur) et matériau générique.
-  const W = (c) => new T.MeshStandardMaterial({ color: c, map: woodMap, normalMap: woodNormal, roughness: 0.55, metalness: 0.05 });
+  const W = (c) => pbr(SETS.wood, 1.2, 1.2, { color: c, normal: 1.1 });
   const L = (c, e) => new T.MeshStandardMaterial({ color: c, emissive: e || 0x000000, roughness: 0.78, metalness: 0.08 });
 
   // ---------- salle ----------
-  const floor = new T.Mesh(new T.PlaneGeometry(20, 34), new T.MeshStandardMaterial({ map: floorTex, normalMap: floorNormal, roughness: 0.28, metalness: 0.25, transparent: true, opacity: 0.74 }));
-  floor.rotation.x = -Math.PI / 2; floor.position.set(0, 0, -1); floor.renderOrder = -10; scene.add(floor);
+  const floor = new T.Mesh(new T.PlaneGeometry(20, 46), Object.assign(pbr(SETS.floor, 2.2, 5.1, { color: 0x88888f, normal: 1, metal: 0.1 }), { transparent: true, opacity: 0.8 }));
+  floor.rotation.x = -Math.PI / 2; floor.position.set(0, 0, 5); floor.renderOrder = -10; scene.add(floor);
   let reflector = null;
   try {
-    reflector = new Reflector(new T.PlaneGeometry(20, 34), { clipBias: 0.003, textureWidth: 1024, textureHeight: 1024, color: 0x9a96b8 });
-    reflector.rotation.x = -Math.PI / 2; reflector.position.set(0, -0.02, -1); scene.add(reflector);
+    reflector = new Reflector(new T.PlaneGeometry(20, 46), { clipBias: 0.003, textureWidth: 1024, textureHeight: 1024, color: 0x9a96b8 });
+    reflector.rotation.x = -Math.PI / 2; reflector.position.set(0, -0.02, 5); scene.add(reflector);
   } catch { floor.material.opacity = 1; }
-  const wallMat = new T.MeshStandardMaterial({ map: stoneTex, normalMap: stoneNormal, normalScale: new T.Vector2(1.2, 1.2), roughness: 0.92, metalness: 0 });
-  for (const [x, z, w, ry] of [[-10, -1, 34, Math.PI / 2], [10, -1, 34, -Math.PI / 2], [0, -16.5, 20, 0]]) {
-    const m = new T.Mesh(new T.PlaneGeometry(w, 12), wallMat); m.position.set(x, 6, z); m.rotation.y = ry; scene.add(m);
+  const wallMat = pbr(SETS.wall, 12.2, 3.2, { color: 0x8c8c96, normal: 1.4 });
+  const wallMatBack = pbr(SETS.wall, 5.3, 3.2, { color: 0x8c8c96, normal: 1.4 });
+  for (const [x, z, w, ry] of [[-10, 5, 46, Math.PI / 2], [10, 5, 46, -Math.PI / 2], [0, -16.5, 20, 0]]) {
+    const m = new T.Mesh(new T.PlaneGeometry(w, 12), w === 20 ? wallMatBack : wallMat); m.position.set(x, 6, z); m.rotation.y = ry; scene.add(m);
   }
-  const ceil = new T.Mesh(new T.PlaneGeometry(20, 34), L(0x0c0812)); ceil.rotation.x = Math.PI / 2; ceil.position.set(0, 12, -1); scene.add(ceil);
+  const ceil = new T.Mesh(new T.PlaneGeometry(20, 46), L(0x0c0812)); ceil.rotation.x = Math.PI / 2; ceil.position.set(0, 12, 5); scene.add(ceil);
 
-  const colMat = L(0x241a30), archMat = L(0x2a1f38);
+  const colMat = pbr(SETS.wall, 1.6, 3.2, { color: 0x6c6c78, normal: 1.2 }), archMat = pbr(SETS.wall, 7, 0.8, { color: 0x64646e, normal: 1.2 });
   for (const z of [8, 3.4, -1.2, -5.8, -10.4, -15]) {
     for (const x of [-8.4, 8.4]) {
       const col = new T.Mesh(new T.CylinderGeometry(0.55, 0.65, 12, 10), colMat); col.position.set(x, 6, z); scene.add(col);
@@ -378,19 +351,29 @@ export function createScene(canvas) {
   const uTime = { value: 0 };
   const prof = [[0.85, 0], [0.92, 0.18], [0.78, 0.5], [0.62, 0.9], [0.56, 1.2], [0.5, 1.45], [0.36, 1.66], [0, 1.78]].map(([x, y]) => new T.Vector2(x, y));
   const ghostVert = 'uniform float uTime;uniform float uGlitch;varying vec3 vN;varying vec3 vV;varying vec3 vP;'
-    + 'void main(){vec3 p=position;float a=atan(p.x,p.z);float low=1.0-smoothstep(0.0,0.5,p.y);'
-    + 'p.y-=(sin(a*7.0+uTime*2.2)*0.5+0.5)*0.35*low*step(0.001,length(p.xz));'
+    + 'void main(){vec3 p=position;float a=atan(p.x,p.z);float low=1.0-smoothstep(0.0,0.7,p.y);'
+    + 'p.y-=(sin(a*7.0+uTime*2.2)*0.5+0.5)*0.4*low*step(0.001,length(p.xz));'
+    + 'float fold=sin(a*9.0+p.y*2.5+uTime*0.8)*0.05+sin(a*17.0-p.y*4.0+uTime*1.3)*0.022;'
+    + 'p.xz*=1.0+fold*(0.5+low);'
     + 'p.x+=sin(p.y*4.0+uTime*2.0)*0.06*(1.0-p.y/1.8);p.z+=cos(p.y*3.0+uTime*1.6)*0.05;'
     + 'p.x+=uGlitch*(step(0.5,fract(sin(floor(p.y*12.0+uTime*30.0))*437.5))-0.5)*0.6;'
     + 'vP=p;vec4 mv=modelViewMatrix*vec4(p,1.0);vN=normalize(normalMatrix*normal);vV=-mv.xyz;gl_Position=projectionMatrix*mv;}';
   const ghostFrag = 'uniform float uTime;uniform float uAppear;uniform float uMul;uniform vec3 uTint;varying vec3 vN;varying vec3 vV;varying vec3 vP;'
     + 'float h(vec2 s){return fract(sin(dot(s,vec2(12.9898,78.233)))*43758.5453);}'
-    + 'void main(){float f=pow(1.0-abs(dot(normalize(vN),normalize(vV))),2.0);'
+    + 'float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(h(i),h(i+vec2(1.0,0.0)),f.x),mix(h(i+vec2(0.0,1.0)),h(i+vec2(1.0,1.0)),f.x),f.y);}'
+    + 'float fbm(vec2 p){float v=0.0,a=0.5;for(int i=0;i<4;i++){v+=a*vn(p);p*=2.03;a*=0.5;}return v;}'
+    + 'void main(){vec3 N=normalize(vN);vec3 V=normalize(vV);float f=pow(1.0-abs(dot(N,V)),1.5);'
     + 'float n=h(floor(vP.xy*22.0+vec2(0.0,-uTime*1.5)));float edge=uAppear*1.25-(1.0-vP.y/1.8)*0.25;if(n>edge)discard;'
-    + 'float a=0.13+f*0.5;vec2 e1=vP.xy-vec2(0.17,1.32);vec2 e2=vP.xy-vec2(-0.17,1.32);'
-    + 'float eye=smoothstep(0.13,0.05,min(length(e1),length(e2)))*step(0.0,vP.z);'
-    + 'float mouth=smoothstep(0.12,0.04,length((vP.xy-vec2(0.0,1.0))*vec2(1.0,0.6)))*step(0.0,vP.z);'
-    + 'a*=(1.0-0.95*eye)*(1.0-0.8*mouth);vec3 col=mix(uTint,vec3(1.0),f*0.6);gl_FragColor=vec4(col*0.85*uMul,a*uMul);}';
+    + 'float flow=fbm(vec2(vP.x*2.6+sin(vP.y*3.0+uTime*0.6)*0.5,vP.y*2.2-uTime*0.55));'
+    + 'float body=0.32+0.5*f;float wisps=0.55+0.95*flow;'
+    + 'float a=clamp(body*wisps,0.0,1.0);'
+    + 'vec2 e1=vP.xy-vec2(0.17,1.32);vec2 e2=vP.xy-vec2(-0.17,1.32);'
+    + 'float eye=smoothstep(0.15,0.06,min(length(e1),length(e2)))*step(0.0,vP.z);'
+    + 'float mouth=smoothstep(0.13,0.04,length((vP.xy-vec2(0.0,0.98))*vec2(1.0,0.55)))*step(0.0,vP.z);'
+    + 'float hood=smoothstep(1.55,1.35,vP.y)*smoothstep(1.05,1.3,vP.y);'
+    + 'a*=(1.0-0.97*eye)*(1.0-0.85*mouth)*(1.0-0.25*hood);'
+    + 'vec3 col=mix(uTint*1.1,vec3(1.0),f*0.4)*(0.7+0.6*flow);'
+    + 'gl_FragColor=vec4(col*uMul*0.85,a*uMul);}';
   function makeGhost(hex) {
     const group = new T.Group(); group.position.set(0, 1.9, -3.4); group.scale.setScalar(2.1); group.visible = false; scene.add(group);
     const gu = { uTime, uAppear: { value: 0 }, uGlitch: { value: 0 }, uMul: { value: 1 }, uTint: { value: new T.Color(hex) } };
@@ -479,7 +462,7 @@ export function createScene(canvas) {
   // ---------- post-traitement ----------
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-  const bloom = new UnrealBloomPass(new T.Vector2(512, 512), 0.7, 0.6, 0.55); composer.addPass(bloom);
+  const bloom = new UnrealBloomPass(new T.Vector2(512, 512), 0.7, 0.6, 0.8); composer.addPass(bloom);
   const finalPass = new ShaderPass({
     uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uAber: { value: 0.0012 }, uFlash: { value: 0 }, uExp: { value: 0.78 }, uFC: { value: new T.Color(0xc9303a) } },
     vertexShader: 'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
@@ -513,7 +496,13 @@ export function createScene(canvas) {
 
   scene.traverse((o) => { if (o.isMesh && o.material?.isMeshStandardMaterial && o !== floor && o.geometry.type !== 'PlaneGeometry') { o.castShadow = true; o.receiveShadow = true; } });
   floor.receiveShadow = true;
-  scene.traverse((o) => { if (o.isMesh && o.geometry.type === 'PlaneGeometry' && o.material === wallMat) o.receiveShadow = true; });
+  scene.traverse((o) => { if (o.isMesh && o.geometry.type === 'PlaneGeometry' && (o.material === wallMat || o.material === wallMatBack)) o.receiveShadow = true; });
+
+  new RGBELoader().load('/assets/hdri/env_1k.hdr', (hdr) => {
+    const pm = new T.PMREMGenerator(renderer);
+    scene.environment = pm.fromEquirectangular(hdr).texture; hdr.dispose(); pm.dispose();
+    scene.traverse((o) => { if (o.material?.isMeshStandardMaterial) o.material.envMapIntensity = 0.3; });
+  });
 
   // ---------- boucle ----------
   const clock = new T.Clock(); let frames = 0, acc = 0, lowQ = false, running = true, onThunder = null;
