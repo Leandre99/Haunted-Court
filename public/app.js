@@ -4,7 +4,9 @@ import { tr, lang, applyStatic, switchLang } from '/i18n.js';
 
 const $ = (id) => document.getElementById(id);
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const sleep = (ms) => new Promise((r) => setTimeout(r, RM ? ms / 5 : ms));
+// ?speed=1.6 accélère tout le déroulé (utile pour filmer une démo nerveuse) ; 1 par défaut.
+const SPEED = Number(new URLSearchParams(location.search).get('speed')) || 1;
+const sleep = (ms) => new Promise((r) => setTimeout(r, (RM ? ms / 5 : ms) / SPEED));
 const TINTS = [0x79e0c4, 0xb48cff, 0xffb35c];
 const hexCss = (n) => '#' + n.toString(16).padStart(6, '0');
 const stage = $('stage');
@@ -161,7 +163,7 @@ async function ritual(names, tints) {
   sceneApi?.vortex(1, 1500); sceneApi?.appear(0, 0, 900); sceneApi?.appear(1, 0, 900);
   sceneApi?.shot('ouija', 1.6); sceneApi?.flare(1, 1200); sceneApi?.ritual(0.9, 1500);
   await sleep(1500);
-  const name = names[0].normalize('NFD').replace(/[^A-Za-z]/g, '').slice(0, 7);
+  const name = names[0].split(' ')[0].normalize('NFD').replace(/[^A-Za-z]/g, '').slice(0, 8);
   for (const ch of name) {
     await sceneApi?.planchette(ch, 800); audio.play('tick'); sceneApi?.burst();
     $('spelled').textContent += ch.toUpperCase(); await sleep(340);

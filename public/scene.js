@@ -31,7 +31,10 @@ export function createScene(canvas) {
 
   // ---------- tweens ----------
   const tweens = [];
-  const K = RM ? 0.2 : 1;
+  const SPEED = Number(new URLSearchParams(location.search).get('speed')) || 1;
+  // ?q=low : rendu allégé (tournage vidéo, machines modestes) — textures de reflet et d'ombre plus petites.
+  const LOWQ = new URLSearchParams(location.search).get('q') === 'low';
+  const K = (RM ? 0.2 : 1) / SPEED;
   const easeIO = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
   function anim(ms, fn, ease = easeIO) {
     ms = Math.max(ms * K, 1);
@@ -78,7 +81,7 @@ export function createScene(canvas) {
   floor.rotation.x = -Math.PI / 2; floor.position.set(0, 0, 5); floor.renderOrder = -10; scene.add(floor);
   let reflector = null;
   try {
-    reflector = new Reflector(new T.PlaneGeometry(20, 46), { clipBias: 0.003, textureWidth: 1024, textureHeight: 1024, color: 0x9a96b8 });
+    reflector = new Reflector(new T.PlaneGeometry(20, 46), { clipBias: 0.003, textureWidth: LOWQ ? 512 : 1024, textureHeight: LOWQ ? 512 : 1024, color: 0x9a96b8 });
     reflector.rotation.x = -Math.PI / 2; reflector.position.set(0, -0.02, 5); scene.add(reflector);
   } catch { floor.material.opacity = 1; }
   const wallMat = pbr(SETS.wall, 12.2, 3.2, { color: 0x8c8c96, normal: 1.4 });
@@ -156,7 +159,7 @@ export function createScene(canvas) {
   scene.add(new T.HemisphereLight(0x6577c8, 0x1a0f24, 0.6));
   const moon = new T.PointLight(0x7f90e8, 1.4, 32, 1.2); moon.position.set(0, 8, -13.5); scene.add(moon);
   const moonDir = new T.DirectionalLight(0x8a9cf0, 0.45); moonDir.position.set(0, 16, -15); moonDir.target.position.set(0, 0, 4); scene.add(moonDir); scene.add(moonDir.target);
-  moonDir.castShadow = true; moonDir.shadow.mapSize.set(2048, 2048); moonDir.shadow.bias = -0.0006; moonDir.shadow.radius = 3;
+  moonDir.castShadow = true; moonDir.shadow.mapSize.set(LOWQ ? 1024 : 2048, LOWQ ? 1024 : 2048); moonDir.shadow.bias = -0.0006; moonDir.shadow.radius = 3;
   Object.assign(moonDir.shadow.camera, { left: -14, right: 14, top: 16, bottom: -16, near: 1, far: 45 });
 
   // ---------- juge, marteau, tables ----------
@@ -570,7 +573,7 @@ export function createScene(canvas) {
 
     const P = proof;
     if (P) {
-      const el = (now - P.t0) / 1000, pmesh = P.m, fk = 0.8 + 0.2 * Math.sin(t * 40); let alive = true;
+      const el = (now - P.t0) / 1000 * SPEED, pmesh = P.m, fk = 0.8 + 0.2 * Math.sin(t * 40); let alive = true;
       if (el < 1.1) { const pu = el / 1.1, pe = easeIO(pu); pmesh.position.lerpVectors(P.from, P.to, pe); pmesh.scale.setScalar(0.25 + 0.75 * pe); pmesh.material.opacity = Math.min(1, pu * 1.6) * fk; }
       else if (P.ok && el < 2.7) { pmesh.position.copy(P.to); pmesh.position.y += Math.sin(t * 2) * 0.08; pmesh.scale.setScalar(1); pmesh.material.opacity = fk; }
       else if (P.ok && el < 3.3) { const p2 = (el - 2.7) / 0.6; pmesh.position.y = P.to.y + p2 * 1.2; pmesh.material.opacity = (1 - p2) * fk; }

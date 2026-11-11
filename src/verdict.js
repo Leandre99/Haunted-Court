@@ -2,10 +2,12 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { mkdir, writeFile, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, basename, resolve } from 'node:path';
+import { join, basename, resolve, relative } from 'node:path';
 import { t, normLang } from './i18n.js';
 
 const run = promisify(execFile);
+// Chemins affichés relatifs au dossier courant : on n'expose pas l'arborescence de la machine.
+const shown = (p) => relative(process.cwd(), p) || p;
 
 function report(lang, repoName, facts, tally) {
   const line = (f) => `- **${f.id}** ${f.text}  \n  _${t(lang, 'rep_evidence')}: ${String(f.evidence).replace(/\n/g, ' ')}_`;
@@ -41,7 +43,7 @@ export async function render(repo, facts, tally, lang = 'en') {
   const reportPath = join(outDir, `${name}-verdict.md`);
   await writeFile(reportPath, md);
 
-  if (tally.verdict !== 'EXECUTER') return { artifact: 'report', path: reportPath, lines: [t(lang, 'v_report_only', { path: reportPath })] };
+  if (tally.verdict !== 'EXECUTER') return { artifact: 'report', path: reportPath, lines: [t(lang, 'v_report_only', { path: shown(reportPath) })] };
 
   const tmp = await mkdtemp(join(tmpdir(), 'haunted-'));
   try {
@@ -58,7 +60,7 @@ export async function render(repo, facts, tally, lang = 'en') {
     return {
       artifact: 'branch',
       path: dest,
-      lines: [t(lang, 'v_branch'), t(lang, 'v_commit', { commit: stdout.trim() }), t(lang, 'v_repo', { path: dest }), t(lang, 'v_report', { path: reportPath })],
+      lines: [t(lang, 'v_branch'), t(lang, 'v_commit', { commit: stdout.trim() }), t(lang, 'v_repo', { path: shown(dest) }), t(lang, 'v_report', { path: shown(reportPath) })],
     };
   } finally {
     await rm(tmp, { recursive: true, force: true });
