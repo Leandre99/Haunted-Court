@@ -1,0 +1,8 @@
+# Security
+
+- **Never build a git command by string concatenation.** Git is only called through `execFile` with an argument array, never `exec` and never a shell. A user-controlled value is its own array element, or is validated first when it must be embedded in a larger argument (for example `${hash}^{commit}` after the hexadecimal check).
+- **Every user-controlled value is validated before use.** This covers request bodies and query strings (repository path, language, witness names, hashes, quotes, sessions), and also untrusted text such as LLM output. Check the type and the shape first, use whitelists where possible (`normLang`, the hash pattern), and refuse invalid input with a readable error. Cap sizes.
+- **The public deployment (`HC_PUBLIC=1`) only ever judges the bundled demo repository** (`demo/django-userena`). A repository path sent by a client is ignored in public mode, and there is no fallback to another repository, including the project's own, if the demo is missing: the request fails instead.
+- **Never log secrets.** `ANTHROPIC_API_KEY` is only read to build the request header. It is never printed, echoed in a response or written to a file. Log error messages, not request headers or whole configuration objects.
+
+Review checklist for a change: Does it add a git call? Does it read a new request field? Does it add a route that takes a repository? Does it log anything that could contain a key?

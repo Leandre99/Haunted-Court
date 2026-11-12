@@ -8,6 +8,7 @@
 - `src/transcript.js`: Markdown transcript of a trial (statements re-verified against git)
 - `src/i18n.js`: server-side texts (en, fr)
 - `src/server.js`: HTTP only, no business logic
+- `src/repo.js`: which repository is judged (public mode = demo only)
 - `public/`: interface (`scene.js` = 3D, `app.js` = the trial, `audio.js` = sound and voice, `i18n.js` = UI texts)
 - `test/`: verifier and duel tests
 - `.kiro/`: specs, steering, hooks

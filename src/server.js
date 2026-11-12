@@ -8,6 +8,7 @@ import { gatherFacts, judge, localizeFacts } from './facts.js';
 import { summon } from './witness.js';
 import { render } from './verdict.js';
 import { duel, bestPair } from './duel.js';
+import { defaultRepo, pickRepo } from './repo.js';
 import { parseSessions, parseArtifactLines, buildTranscript, transcriptFileName } from './transcript.js';
 import { t, normLang } from './i18n.js';
 
@@ -18,9 +19,9 @@ const PORT = Number(process.env.PORT || 3000);
 // (sinon n'importe qui pourrait demander au serveur de lire un chemin arbitraire).
 const HOST = process.env.HOST || '127.0.0.1';
 const PUBLIC_MODE = process.env.HC_PUBLIC === '1';
-const DEFAULT_REPO = existsSync(join(ROOT, 'demo', 'django-userena', '.git')) ? join(ROOT, 'demo', 'django-userena') : ROOT;
+const DEFAULT_REPO = defaultRepo(ROOT, PUBLIC_MODE);
 
-const repoOf = (wanted) => (PUBLIC_MODE ? DEFAULT_REPO : resolve(wanted || DEFAULT_REPO));
+const repoOf = (wanted, lang) => pickRepo({ wanted, publicMode: PUBLIC_MODE, fallback: DEFAULT_REPO, lang });
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png', '.hdr': 'application/octet-stream' };
 
@@ -62,7 +63,7 @@ const server = http.createServer(async (req, res) => {
   let lang = normLang(url.searchParams.get('lang'));
   try {
     if (url.pathname === '/api/case' && req.method === 'GET') {
-      const repo = repoOf(url.searchParams.get('repo'));
+      const repo = repoOf(url.searchParams.get('repo'), lang);
       const c = await load(repo, lang);
       const first = c.commits[c.commits.length - 1].date.slice(0, 4);
       const last = c.commits[0].date.slice(0, 4);
@@ -79,14 +80,14 @@ const server = http.createServer(async (req, res) => {
     if (url.pathname === '/api/testimony' && req.method === 'POST') {
       const body = await readJson(req);
       lang = normLang(body.lang);
-      const repo = repoOf(body.repo);
+      const repo = repoOf(body.repo, lang);
       const c = await load(repo, lang);
       return send(res, 200, await summon(repo, body.author, c.commits, { perjury: Boolean(body.perjury), lang }));
     }
     if (url.pathname === '/api/duel' && req.method === 'POST') {
       const body = await readJson(req);
       lang = normLang(body.lang);
-      const r = repoOf(body.repo);
+      const r = repoOf(body.repo, lang);
       const c = await load(r, lang);
       let { a, b } = body;
       if (!a || !b) {
@@ -99,7 +100,7 @@ const server = http.createServer(async (req, res) => {
     if (url.pathname === '/api/verdict' && req.method === 'POST') {
       const body = await readJson(req);
       lang = normLang(body.lang);
-      const r = repoOf(body.repo);
+      const r = repoOf(body.repo, lang);
       const c = await load(r, lang);
       const tally = judge(c.facts);
       return send(res, 200, { ...tally, ...(await render(r, localizeFacts(c.facts, lang), tally, lang)) });
@@ -114,7 +115,7 @@ const server = http.createServer(async (req, res) => {
         if (err.status === 400) return send(res, 400, { error: err.message });
         throw err;
       }
-      const r = repoOf(body.repo);
+      const r = repoOf(body.repo, lang);
       const c = await load(r, lang);
       const md = await buildTranscript({ repo: r, lang, sessions, tally: judge(c.facts), artifactLines: parseArtifactLines(body.verdict?.lines) });
       return send(res, 200, md, 'text/markdown; charset=utf-8', { 'content-disposition': `attachment; filename="${transcriptFileName(r)}"` });
