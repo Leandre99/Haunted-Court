@@ -56,16 +56,27 @@ Showing the proof is more convincing than asserting it: the flying `git show` pa
 ## What's next
 Property-based tests for the verifier, more repositories and witnesses, and an LLM-written cross-examination.
 
-## How Kiro was used (required write-up) — **[TO FILL, truthfully]**
-Judges check *how effectively* Kiro was used. Write only what you did. Suggested structure, with what is true today:
+## How Kiro was used (required write-up)
 
-- **Spec-driven development:** the repository contains `requirements.md`, `design.md` and `tasks.md` under `.kiro/specs/haunted-court/`. **[TO FILL: which tasks Kiro implemented from these specs, and how it compared with free-form prompting.]**
-- **Steering docs:** `.kiro/steering/` (`product.md`, `tech.md`, `structure.md`) hold product rules (e.g. "no sentence without a commit hash"), technical rules (e.g. "never use a shell for git") and the layout. **[TO FILL: which rule changed Kiro's output most.]**
-- **Agent hooks:** `.kiro/hooks/` has a hook that reruns the verifier tests when the verifier changes. **[TO FILL: whether it fired and what it caught.]**
-- **MCP / powers / custom agents / property-based testing:** **[TO FILL or leave out if not used.]**
-- **Which Kiro app** (IDE, CLI, Web, Crew) and how they differed: **[TO FILL.]**
+I used the **Kiro IDE** (desktop app, signed in with GitHub) in **supervised mode**: every file change was shown to me and approved or refused by me. I did not use the CLI, Kiro Web, Kiro Crew, MCP servers, powers or custom agents. Across the tasks below Kiro used about **16.5 of the 4,000 hackathon credits**.
 
-Disclosure: the first version of this codebase was written with another AI coding assistant (Claude Code) before Kiro was used on it, and `.kiro/` was created at the start of the project. Say so plainly rather than implying Kiro wrote everything.
+The first version of the game (engine, 3D courtroom, audio, deployment) was written **before Kiro was used on it**, with another AI coding assistant; the `.kiro/` specs and steering existed from the start of the project. Everything listed below was done **in Kiro**, in the Kiro commits of the repository (messages ending "built with Kiro").
+
+**1. Spec-driven development: property-based tests (task 12 of the spec).**
+I gave Kiro a requirement (R3, traceability) and four properties to check for `verifyClaim()`. Kiro read the code, then **stopped to ask a question**: my property said uppercase hexadecimal hashes must be rejected, but the implementation accepts them. I decided the implementation was right, because git accepts uppercase hashes and my wording was imprecise. Kiro first recorded the mismatch as a "bug" and a `todo` test; I told it to correct that. It then changed the property, turned the `todo` into a normal test, and added a case-insensitivity rule to requirement R3. Result: tests with `fast-check` (devDependency only; the server stays dependency-free), 17 of 17 passing, no change to `src/`. Cost: about 2.9 credits.
+
+**2. Native spec format.**
+Kiro's `validate_spec_format` flagged my hand-written `requirements.md`. I asked Kiro to reformat it without losing content. It produced a standard document (Introduction, Glossary, eight requirements with user stories and numbered WHEN/THEN/SHALL criteria) and the validator reported no issues. Kiro wrote seven user stories that did not exist; I reviewed them. Cost: 0.2 credit.
+
+**3. A new feature built spec-first: `trial-transcript`.**
+Kiro wrote a complete spec in `.kiro/specs/trial-transcript/` (six requirements, a design, six tasks) before any code, then implemented it: a "Download transcript" button, `POST /api/transcript`, English and French labels, and 12 tests (including a fast-check property). A design decision I would highlight: the server **re-verifies every statement against git and ignores what the browser sends**, so a forged request cannot make the transcript say something git does not confirm. The route was tested with such a forged request (everything marked "verified", a fake command): none of it reached the document, while the real perjuries stayed rejected. Total: 29 of 29 tests, no new server dependency. Cost: about 9.5 credits.
+
+**4. Steering: a security document that changed Kiro's review.**
+I asked Kiro to create `.kiro/steering/security.md` with four rules (no string-built git commands, validate every user-controlled value, the public deployment only ever judges the bundled demo repository, never log secrets) and then review five source files against it. It found **two real violations** that I had not noticed: in public mode the server could fall back to judging its own project directory if the demo was missing, and a non-string `repo` crashed with an internal `TypeError`. It fixed both in a small new module (`src/repo.js`) with five regression tests (34 of 34 passing) and listed, without changing them, other weaknesses outside my rules (information disclosure of absolute paths and raw error messages). Honest caveat: Kiro did not run the new tests against the old code to see them fail. Cost: about 3.9 credits.
+
+**What I would do next with Kiro:** fix the information-disclosure items it listed, and use hooks and MCP more.
+
+**Agent hooks:** the repository contains a hook (`.kiro/hooks/`) that reruns the verifier tests when the verifier changes. **[TO CONFIRM before submitting: did it run during the tasks above? If it did, say what it caught; if not, delete this paragraph or say it did not fire.]**
 
 ## Third-party material and disclosures (required)
 - **Pre-existing work:** the visual concept of the courtroom (layout, ritual, git-tree proofs) comes from an earlier prototype made *before* the submission period. The code in this repository was written during the submission period (first commit: 30 Oct 2026).
