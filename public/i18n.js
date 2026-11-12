@@ -25,6 +25,7 @@ const STR = {
     trial: 'Full trial', objections: 'Objections', objection_btn: 'Objection', cinema_on: 'Cinema', cinema_off: 'Exit cinema', verifying: 'checking git…',
     ph_open: 'Court is open', ph_summon: 'Summoning', ph_testimony: 'Testimony', ph_cross: 'Cross-examination', ph_objection: 'Objection!', ph_verdict: 'Verdict',
     recorded: 'recorded trial (run locally for live git)',
+    transcript_btn: 'Download transcript', transcript_err: 'Cannot produce the transcript: {msg}',
     no_backend: 'The game server is not reachable. Run "npm start" and open http://127.0.0.1:3000 (static hosting cannot serve /api).',
   },
   fr: {
@@ -52,6 +53,7 @@ const STR = {
     trial: 'Procès complet', objections: 'Objections', objection_btn: 'Objection', cinema_on: 'Cinéma', cinema_off: 'Quitter cinéma', verifying: 'vérification dans git…',
     ph_open: 'Audience ouverte', ph_summon: 'Invocation', ph_testimony: 'Témoignage', ph_cross: 'Contre-interrogatoire', ph_objection: 'Objection !', ph_verdict: 'Verdict',
     recorded: 'procès enregistré (lancez en local pour git en direct)',
+    transcript_btn: 'Télécharger la transcription', transcript_err: 'Transcription impossible : {msg}',
     no_backend: 'Le serveur du jeu est injoignable. Lancez « npm start » puis ouvrez http://127.0.0.1:3000 (un hébergement statique ne peut pas servir /api).',
   },
 };

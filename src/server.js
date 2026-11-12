@@ -8,6 +8,7 @@ import { gatherFacts, judge, localizeFacts } from './facts.js';
 import { summon } from './witness.js';
 import { render } from './verdict.js';
 import { duel, bestPair } from './duel.js';
+import { parseSessions, parseArtifactLines, buildTranscript, transcriptFileName } from './transcript.js';
 import { t, normLang } from './i18n.js';
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
@@ -42,8 +43,8 @@ function dedupe(authors) {
   return authors.filter((a) => !seen.has(fold(a.name)) && seen.add(fold(a.name)));
 }
 
-function send(res, code, body, type = 'application/json') {
-  res.writeHead(code, { 'content-type': type, 'cache-control': 'no-store' });
+function send(res, code, body, type = 'application/json', headers = {}) {
+  res.writeHead(code, { 'content-type': type, 'cache-control': 'no-store', ...headers });
   res.end(typeof body === 'string' || Buffer.isBuffer(body) ? body : JSON.stringify(body));
 }
 
@@ -102,6 +103,21 @@ const server = http.createServer(async (req, res) => {
       const c = await load(r, lang);
       const tally = judge(c.facts);
       return send(res, 200, { ...tally, ...(await render(r, localizeFacts(c.facts, lang), tally, lang)) });
+    }
+    if (url.pathname === '/api/transcript' && req.method === 'POST') {
+      const body = (await readJson(req)) ?? {};
+      lang = normLang(body.lang);
+      let sessions;
+      try {
+        sessions = parseSessions(body.sessions, lang);
+      } catch (err) {
+        if (err.status === 400) return send(res, 400, { error: err.message });
+        throw err;
+      }
+      const r = repoOf(body.repo);
+      const c = await load(r, lang);
+      const md = await buildTranscript({ repo: r, lang, sessions, tally: judge(c.facts), artifactLines: parseArtifactLines(body.verdict?.lines) });
+      return send(res, 200, md, 'text/markdown; charset=utf-8', { 'content-disposition': `attachment; filename="${transcriptFileName(r)}"` });
     }
     if (url.pathname === '/healthz') return send(res, 200, 'ok', 'text/plain');
     if (url.pathname.startsWith('/api/')) return send(res, 404, { error: 'not found' });

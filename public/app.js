@@ -11,7 +11,7 @@ const TINTS = [0x79e0c4, 0xb48cff, 0xffb35c];
 const hexCss = (n) => '#' + n.toString(16).padStart(6, '0');
 const stage = $('stage');
 let sceneApi = null;
-const current = { repo: null, list: [], busy: false, verified: 0, rejected: 0, objections: 0, witnessed: 0, recorded: false, emberIv: 0 };
+const current = { repo: null, list: [], busy: false, verified: 0, rejected: 0, objections: 0, witnessed: 0, recorded: false, emberIv: 0, sessions: [], verdictLines: [] };
 
 try { sceneApi = createScene($('gl')); } catch (e) { console.warn(e); }
 if (!sceneApi) $('nogl').hidden = false;
@@ -209,6 +209,7 @@ async function summonWitness(i, perjury = $('perjury').checked) {
     phase(tr('ph_testimony'), true);
     for (const s of tm.statements) await statement(s, 0);
     current.witnessed++;
+    current.sessions.push({ witness: tm.witness, statements: tm.statements });
     $('note').textContent = tr('note_witness');
     endScene();
   });
@@ -235,6 +236,7 @@ async function runDuel(perjury = $('perjury').checked) {
     phase(tr('ph_testimony'), true);
     for (const s of d.statements) await statement(s, s.side, s.witness.toUpperCase());
     current.witnessed++;
+    current.sessions.push({ file: d.file, witnesses: d.witnesses, statements: d.statements });
     $('note').textContent = tr('note_duel');
     current.duelling = false;
     endScene();
@@ -265,6 +267,8 @@ async function verdict() {
     big.style.animation = 'none'; void big.offsetWidth; big.style.animation = '';
     $('vscore').textContent = tr('score', { d: v.defense, p: v.prosecution });
     $('term').textContent = v.lines.map((l) => '> ' + l).join('\n');
+    current.verdictLines = v.lines;
+    $('tNote').textContent = '';
     $('verdict').hidden = false;
     audio.play(v.verdict === 'EXECUTER' ? 'choir' : 'organ');
     audio.speak(tr('verdict_say', { v: tr(v.verdict).toLowerCase() }), { pitch: 0.4, rate: 0.75 });
@@ -272,6 +276,31 @@ async function verdict() {
     current.emberIv = setInterval(() => sceneApi?.sparks((Math.random() - 0.5) * 9, 2.8 + Math.random() * 2, -11.5 + Math.random() * 2.5, Math.random() < 0.5 ? 0xf08a24 : 0xc9303a, 16, 2.6), 650);
   });
 }
+/** Télécharge le transcript : le serveur revérifie chaque déclaration contre git avant de l'écrire. */
+async function downloadTranscript() {
+  const btn = $('vTranscript'); btn.disabled = true; $('tNote').textContent = '';
+  try {
+    let res;
+    try {
+      res = await fetch('/api/transcript', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ repo: current.repo, lang, sessions: current.sessions, verdict: { lines: current.verdictLines } }) });
+    } catch { throw new Error(tr('no_backend')); }
+    const type = res.headers.get('content-type') || '';
+    if (!res.ok) {
+      let msg = String(res.status);
+      if (type.includes('json')) msg = (await res.json()).error || msg; else msg = tr('no_backend');
+      throw new Error(msg);
+    }
+    if (!type.includes('markdown')) throw new Error(tr('no_backend'));
+    const name = /filename="([^"]+)"/.exec(res.headers.get('content-disposition') || '')?.[1] || 'trial-transcript.md';
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(await res.blob()); a.download = name;
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  } catch (e) {
+    $('tNote').textContent = tr('transcript_err', { msg: e.message });
+  } finally { btn.disabled = false; }
+}
+$('vTranscript').addEventListener('click', downloadTranscript);
 $('vClose').addEventListener('click', () => {
   $('verdict').hidden = true; clearInterval(current.emberIv); setCinema(false);
   sceneApi?.flare(0, 800); sceneApi?.shot('wide', 1.2); sceneApi?.treeBurn(0x79e0c4); phase(tr('ph_open'), false);

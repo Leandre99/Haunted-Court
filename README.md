@@ -8,12 +8,12 @@ Built for Kiroween 2026 — category: **Frankenstein** (git history + an LLM per
 
 ## Run it
 
-Requirements: Node 20+ and git. No npm install needed.
+Requirements: Node 20+ and git. The server has no dependency, so no npm install is needed to run it; `npm install` is only needed for the tests (`fast-check`, a dev dependency).
 
 ```bash
 git clone https://github.com/bread-and-pepper/django-userena demo/django-userena   # demo repository to put on trial
 npm start        # http://127.0.0.1:3000
-npm test         # tests for the verifier and the duel
+npm test         # tests for the verifier, the duel and the transcript
 ```
 
 Without the demo repository, Haunted Court judges its own repository. To judge another one: `http://127.0.0.1:3000/?repo=/path/to/repo`.
@@ -27,6 +27,7 @@ Optional: set `ANTHROPIC_API_KEY` and the ghosts' statements are written by an L
 3. **Verification.** `verifyClaim()` checks that the hash exists, that the commit belongs to the witness, and that the quote appears in the commit message or diff. Hashes are validated before they ever reach git.
 4. **Duel.** The engine finds the pair of witnesses and the code file they both touched most; they answer each other, each limited to their own commits.
 5. **Verdict.** EXECUTE creates the branch `haunted-court/verdict` (with a `MIGRATION_PLAN.md`) in a clone of the repository; UNPLUG writes a report on what is worth saving. The original repository is never touched.
+6. **Transcript.** Once the verdict is displayed, **Download transcript** saves the trial as a Markdown file: each witness, each statement with its commit hash, verified or rejected, the reason, the proof lines returned by git, and the verdict at the end. The server checks every statement against git again before writing it (what the browser sends is never trusted) and does not create a branch or modify the repository. It is served by `POST /api/transcript` (body: `{repo, lang, sessions, verdict: {lines}}` where `sessions` are the `/api/testimony` and `/api/duel` responses; answer: `text/markdown` attachment, `400` if the body is invalid). It needs the Node server, not the recorded-trial fallback.
 
 The sound (rain, thunder, gavel) and the ghosts' voices are synthesized in the browser (Web Audio and Speech Synthesis) and are off by default: use the buttons on the left. The **Lying witness** option is a demo: it adds one false statement so you can watch the verifier work.
 
