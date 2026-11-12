@@ -17,6 +17,7 @@ A dead git repository is put on trial. The ghosts of its former developers testi
 - WHEN a statement cites a hash THEN the system SHALL verify that the hash exists, that the commit belongs to the witness, and that the quote appears in the message or the diff.
 - IF any check fails THEN the statement SHALL be marked "rejected" with the reason, and the interface SHALL raise an objection.
 - WHEN a hash is not of the expected hexadecimal form THEN the system SHALL reject it without sending it to git.
+- Hashes SHALL be matched case-insensitively (uppercase hexadecimal is a valid hash).
 
 ## R4 — Executable verdict
 - WHEN the verdict is requested THEN the system SHALL compare the defense and prosecution points and return EXECUTE or UNPLUG.

@@ -11,6 +11,6 @@
 - [x] 9. Duel: two ghosts cross-examined on the same file (R6)
 - [x] 10. Ghost voices and synthesized sound ambience (R7)
 - [x] 11. English by default, French option (R8)
-- [ ] 12. Property-based tests for `verifyClaim`
+- [x] 12. Property-based tests for `verifyClaim` (R3): `test/verify.property.test.js`, fast-check as devDependency
 - [ ] 13. Public deployment (Dockerfile ready, hosting to be done)
 - [ ] 14. Demo video and Devpost page

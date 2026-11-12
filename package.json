@@ -12,5 +12,8 @@
     "test": "node --test test/*.test.js",
     "record": "node scripts/record.js"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "fast-check": "4.10.2"
+  }
 }
