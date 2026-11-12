@@ -58,7 +58,7 @@ Property-based tests for the verifier, more repositories and witnesses, and an L
 
 ## How Kiro was used (required write-up)
 
-I used the **Kiro IDE** (desktop app, signed in with GitHub) in **supervised mode**: every file change was shown to me and approved or refused by me. I did not use the CLI, Kiro Web, Kiro Crew, MCP servers, powers or custom agents. Across the tasks below Kiro used about **16.5 of the 4,000 hackathon credits**.
+I used the **Kiro IDE** (desktop app, signed in with GitHub) in **supervised mode**: every file change was shown to me and approved or refused by me. I did not use the CLI, Kiro Web, Kiro Crew, MCP servers, powers or custom agents. Across the tasks below Kiro used about **19 of the 4,000 hackathon credits**.
 
 The first version of the game (engine, 3D courtroom, audio, deployment) was written **before Kiro was used on it**, with another AI coding assistant; the `.kiro/` specs and steering existed from the start of the project. Everything listed below was done **in Kiro**, in the Kiro commits of the repository (messages ending "built with Kiro").
 
@@ -73,6 +73,9 @@ Kiro wrote a complete spec in `.kiro/specs/trial-transcript/` (six requirements,
 
 **4. Steering: a security document that changed Kiro's review.**
 I asked Kiro to create `.kiro/steering/security.md` with four rules (no string-built git commands, validate every user-controlled value, the public deployment only ever judges the bundled demo repository, never log secrets) and then review five source files against it. It found **two real violations** that I had not noticed: in public mode the server could fall back to judging its own project directory if the demo was missing, and a non-string `repo` crashed with an internal `TypeError`. It fixed both in a small new module (`src/repo.js`) with five regression tests (34 of 34 passing) and listed, without changing them, other weaknesses outside my rules (information disclosure of absolute paths and raw error messages). Honest caveat: Kiro did not run the new tests against the old code to see them fail. Cost: about 3.9 credits.
+
+**5. Kiro reviewing its own specs against the code.**
+I asked Kiro to check the design and tasks files of both specs against the requirements and the code. It found drift (an API table missing the `repo` parameter and the transcript route, a route-order description that did not match the code, missing error-handling, testing and correctness sections, an open task that was actually done) and, when I approved, updated the documents without touching any source file. Honest caveat: Kiro's spec-format validator was not available in that session, so this was a manual check by Kiro, not an automated validation. Cost: about 2.6 credits.
 
 **What I would do next with Kiro:** fix the information-disclosure items it listed, and use hooks and MCP more.
 
