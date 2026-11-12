@@ -33,6 +33,8 @@ The server only reads `text`, `hash`, `quote` and the witness from a statement. 
 parseSessions(raw)                      // validates and normalizes; throws an error with status 400
 buildTranscript({ repo, lang, sessions, tally, artifactLines }) // returns the Markdown string
 transcriptFileName(repo)                // safe file name, e.g. trial-transcript-<repo>.md
+parseArtifactLines(raw)                 // artifact lines only: strings, capped at 10 lines of 200 characters
+class BadRequest extends Error          // carries status 400; thrown by parseSessions, mapped to a 400 by the route
 ```
 
 `buildTranscript` calls `verifyClaim()` and `proofOf()` for every statement, then `reason(lang, v)` for the text of the reason.
@@ -41,8 +43,8 @@ transcriptFileName(repo)                // safe file name, e.g. trial-transcript
 
 `POST /api/transcript` with body `{ repo, lang, sessions, verdict: { lines } }`:
 
-1. `normLang`, `repoOf`, `load()` as for the other routes (same errors for a bad repository, same public mode behaviour).
-2. `parseSessions(body.sessions)`; on invalid input answer `400 { error }` using a message from `src/i18n.js`.
+1. `normLang`, then `parseSessions(body.sessions)` first: the body is parsed and validated before anything else, so invalid input answers `400 { error }` (message from `src/i18n.js`) before git is touched.
+2. `repoOf`, `load()` as for the other routes (same errors for a bad repository, same public mode behaviour).
 3. `tally = judge(c.facts)`. The route never calls `render()`, so no branch, clone or report is created.
 4. Respond `200` with `content-type: text/markdown; charset=utf-8` and `content-disposition: attachment; filename="..."`.
 
@@ -159,6 +161,7 @@ Limits: at most 20 sessions and 100 statements in total. The existing `readJson`
 *For any* valid request, the last section of the transcript is the verdict.
 
 **Validates: Requirements 3.1**
+
 ## Decisions
 
 - **Server re-verification** keeps the guarantee "no sentence without proof in git". A forged request cannot produce a transcript that says something git does not confirm.
