@@ -76,7 +76,7 @@ I asked Kiro to create `.kiro/steering/security.md` with four rules (no string-b
 
 **What I would do next with Kiro:** fix the information-disclosure items it listed, and use hooks and MCP more.
 
-**Agent hooks:** the repository contains a hook (`.kiro/hooks/`) that reruns the verifier tests when the verifier changes. **[TO CONFIRM before submitting: did it run during the tasks above? If it did, say what it caught; if not, delete this paragraph or say it did not fire.]**
+**Agent hooks:** the repository contains a hook, "Verifier tests" (`.kiro/hooks/`), that reruns `npm test` when the verifier files change (`src/git.js`, `src/witness.js`, `src/duel.js` or a test file). I checked it works: saving a one-character edit to `src/duel.js` in Kiro made it run the test suite on its own and report the result. I only confirmed this in a separate check; I did not track whether it fired during each of the tasks above, so I do not claim it caught anything.
 
 ## Third-party material and disclosures (required)
 - **Pre-existing work:** the visual concept of the courtroom (layout, ritual, git-tree proofs) comes from an earlier prototype made *before* the submission period. The code in this repository was written during the submission period (first commit: 30 Oct 2026).
